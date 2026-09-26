@@ -1,675 +1,751 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>স্কুল শিক্ষক প্যানেল</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            background-color: #f1f5f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 10px;
-        }
-        .mobile-container {
-            width: 100%;
-            max-width: 380px;
-            height: 680px;
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            position: relative;
-            border: 1px solid #e2e8f0;
-        }
-        .screen {
-            display: none;
-            flex-direction: column;
-            height: 100%;
-            width: 100%;
-            padding: 15px;
-            overflow-y: auto;
-        }
-        .screen.active {
-            display: flex;
-        }
-        /* Header */
-        .top-bar {
-            background-color: #0f172a;
-            color: #ffffff;
-            padding: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: -15px -15px 15px -15px;
-        }
-        .top-bar button {
-            background: transparent;
-            border: none;
-            color: #ffffff;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 13px;
-        }
-        /* Form controls */
-        label {
-            font-size: 12px;
-            font-weight: bold;
-            color: #334155;
-            margin-top: 8px;
-            margin-bottom: 3px;
-            display: block;
-        }
-        input[type="text"], input[type="password"], select {
-            width: 100%;
-            padding: 8px 10px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            background-color: #f8fafc;
-            font-size: 13px;
-            outline: none;
-        }
-        input:focus, select:focus {
-            border-color: #0f172a;
-        }
-        .btn {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 13px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: 0.2s;
-        }
-        .btn-dark { background-color: #0f172a; color: white; }
-        .btn-dark:hover { background-color: #334155; }
-        .btn-success { background-color: #10b981; color: white; }
-        .btn-success:hover { background-color: #059669; }
-        .btn-danger { background-color: #ef4444; color: white; }
-        .btn-danger:hover { background-color: #dc2626; }
-        
-        .btn-group {
-            display: flex;
-            gap: 8px;
-            margin-top: 5px;
-        }
-        .btn-group .btn {
-            flex: 1;
-        }
-        /* Tables */
-        .preview-box {
-            flex: 1;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            background: #f8fafc;
-            overflow-y: auto;
-            margin-top: 10px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 11px;
-        }
-        th {
-            background-color: #334155;
-            color: white;
-            padding: 6px;
-            text-align: left;
-            position: sticky;
-            top: 0;
-        }
-        td {
-            padding: 6px;
-            border-bottom: 1px solid #e2e8f0;
-            background: white;
-        }
-        .text-center { text-align: center; }
-        .entry-input {
-            width: 45px;
-            text-align: center;
-            padding: 3px;
-            border: 1px solid #cbd5e1;
-            border-radius: 4px;
-        }
-        /* Modal Progress */
-        .modal-overlay {
-            display: none;
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-        }
-        .modal-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            width: 85%;
-            text-align: center;
-        }
-        .progress-bar {
-            width: 100%;
-            height: 12px;
-            background: #e2e8f0;
-            border-radius: 6px;
-            overflow: hidden;
-            margin: 12px 0;
-        }
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: #10b981;
-            transition: width 0.3s;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PP COMPOSE & PRINTING HUB - ডিজিটাল ইনভয়েস ও অনলাইন সেবাসমূহ</title>
+  <!-- Google Fonts: Hind Siliguri -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --primary-red: #D32F2F;
+      --dark-red: #9A0007;
+      --primary-blue: #0D47A1;
+      --light-bg: #F8F9FA;
+      --border-color: #E0E0E0;
+      --text-color: #212121;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Hind Siliguri', sans-serif;
+    }
+
+    body {
+      background-color: var(--light-bg);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    /* Navigation Bar */
+    .navbar {
+      background-color: #FFFFFF;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 3px solid var(--primary-red);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+    }
+
+    .brand-logo-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo-img {
+      max-height: 55px;
+      object-fit: contain;
+    }
+
+    .shop-title h1 {
+      font-size: 22px;
+      color: var(--primary-blue);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .shop-title p {
+      font-size: 13px;
+      color: var(--primary-red);
+      font-weight: 600;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn-nav {
+      background: var(--primary-red);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s;
+    }
+
+    .btn-nav:hover {
+      background: var(--dark-red);
+    }
+
+    .btn-sheet {
+      background: #2E7D32;
+    }
+    .btn-sheet:hover {
+      background: #1B5E20;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-blue) 100%);
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    .hero-banner h2 {
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+
+    .hero-banner p {
+      font-size: 16px;
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.15);
+      padding: 10px 20px;
+      border-radius: 30px;
+      backdrop-filter: blur(5px);
+    }
+
+    /* Main Layout */
+    .container {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 15px;
+    }
+
+    /* Invoice Container */
+    .invoice-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      padding: 30px;
+      border: 1px solid var(--border-color);
+    }
+
+    /* Invoice Header Printing */
+    .invoice-header {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 2px dashed var(--primary-red);
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+    }
+
+    .invoice-brand {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .invoice-brand img {
+      max-height: 70px;
+    }
+
+    .shop-info h2 {
+      color: var(--primary-blue);
+      font-size: 24px;
+    }
+
+    .shop-info p {
+      font-size: 13px;
+      color: #555;
+    }
+
+    .invoice-title-block {
+      text-align: right;
+    }
+
+    .invoice-badge {
+      background: var(--primary-red);
+      color: white;
+      padding: 4px 15px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 18px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    /* Customer Details Grid */
+    .customer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      background: #FFF8F8;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #FFEBEE;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    .form-control {
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-red);
+    }
+
+    /* Invoice Table */
+    .table-responsive {
+      overflow-x: auto;
+      margin-bottom: 20px;
+    }
+
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .invoice-table th, .invoice-table td {
+      border: 1px solid var(--border-color);
+      padding: 10px;
+      text-align: left;
+    }
+
+    .invoice-table th {
+      background-color: var(--primary-red);
+      color: white;
+      font-weight: 600;
+    }
+
+    .custom-subject-input {
+      margin-top: 5px;
+      display: none;
+    }
+
+    .btn-add-row {
+      background: var(--primary-blue);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .btn-delete {
+      background: #e53935;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* Summary Calculation */
+    .summary-box {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 30px;
+    }
+
+    .summary-table {
+      width: 320px;
+      border-collapse: collapse;
+    }
+
+    .summary-table td {
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .summary-table tr.total-row {
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--primary-red);
+      background-color: #FFEBEE;
+    }
+
+    /* Footer Signatures */
+    .invoice-footer-signatures {
+      margin-top: 50px;
+      display: flex;
+      justify-content: space-between;
+      padding-top: 20px;
+    }
+
+    .sig-line {
+      border-top: 1px solid #888;
+      width: 180px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* Action Buttons Bar */
+    .actions-bar {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 25px;
+      background: #eee;
+      padding: 15px;
+      border-radius: 8px;
+    }
+
+    .btn-action {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.2s;
+    }
+
+    .btn-print {
+      background: var(--primary-red);
+      color: white;
+    }
+
+    .btn-print:hover {
+      background: var(--dark-red);
+    }
+
+    /* Modal for Google Sheet Setup */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      max-width: 550px;
+      width: 90%;
+    }
+
+    /* PRINT MEDIA QUERY (A4 Size) */
+    @media print {
+      body {
+        background: white;
+        color: black;
+      }
+      .navbar, .hero-banner, .actions-bar, .btn-add-row, .btn-delete, .no-print {
+        display: none !important;
+      }
+      .container {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      .invoice-card {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+      }
+      .form-control {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+        font-weight: 600;
+      }
+      select.form-control {
+        appearance: none;
+        -webkit-appearance: none;
+      }
+      .custom-subject-input {
+        border: none !important;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div class="mobile-container">
-    <!-- LOGIN SCREEN -->
-    <div id="login-screen" class="screen active" style="justify-content: center;">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <h2 id="login-school-name" style="font-size: 18px; color: #1e293b;">আমার বিদ্যালয়</h2>
-            <p style="font-size: 14px; font-weight: bold; color: #475569;">স্কুল শিক্ষক প্যানেল</p>
-            <p style="font-size: 12px; color: #64748b;">আপনার অ্যাকাউন্টে লগইন করুন</p>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="brand-logo-container">
+        <img id="mainLogo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23D32F2F'/><text x='50' y='62' font-size='40' font-weight='bold' fill='white' text-anchor='middle'>PP</text></svg>" alt="Logo" class="logo-img">
+        <div class="shop-title">
+          <h1>PP COMPOSE & PRINTING HUB</h1>
+          <p>Quality Print Better Service</p>
         </div>
+      </div>
+      <div class="nav-actions no-print">
+        <button class="btn-nav btn-sheet" onclick="openSheetModal()">
+          <i class="fa-solid fa-file-excel"></i> গুগল শিট লিংক করুন
+        </button>
+        <label class="btn-nav" style="cursor: pointer;">
+          <i class="fa-solid fa-image"></i> লোগো চেঞ্জ
+          <input type="file" id="logoUploader" accept="image/*" style="display: none;" onchange="uploadLogo(event)">
+        </label>
+      </div>
+    </div>
+  </nav>
 
-        <div>
-            <label>ইউজারনেম</label>
-            <input type="text" id="username" placeholder="admin">
+  <!-- Hero Banner -->
+  <section class="hero-banner no-print">
+    <h2>অনলাইন কম্পিউটার কম্পোজ ও প্রশ্নপত্র প্রিন্টিং সার্ভিস</h2>
+    <p><i class="fa-solid fa-globe"></i> সমগ্র বাংলাদেশের যেকোনো প্রাইমারি স্কুল, হাই স্কুল, কলেজ ও মাদ্রাসার প্রশ্নপত্র, লেকচার শিট ও গাইডের অনলাইন প্রিন্টিং ও ডেলিভারি সেবা দেওয়া হয়।</p>
+  </section>
 
-            <label>পাসওয়ার্ড</label>
-            <input type="password" id="password" placeholder="1234">
-
-            <button class="btn btn-dark" onclick="handleLogin()">লগইন করুন</button>
+  <!-- Main Invoice Area -->
+  <div class="container">
+    <div class="invoice-card" id="invoiceArea">
+      
+      <!-- Invoice Header -->
+      <div class="invoice-header">
+        <div class="invoice-brand">
+          <img id="invoiceLogo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23D32F2F'/><text x='50' y='62' font-size='40' font-weight='bold' fill='white' text-anchor='middle'>PP</text></svg>" alt="Logo">
+          <div class="shop-info">
+            <h2>PP COMPOSE & PRINTING HUB</h2>
+            <p><i class="fa-solid fa-location-dot"></i> বাকলিয়া, চকবাজার, চট্টগ্রাম (সারাদেশে অনলাইন অর্ডার গ্রহণ করা হয়)</p>
+            <p><i class="fa-solid fa-phone"></i> ০১৭৭৯-৯OD৩27 | <i class="fa-solid fa-envelope"></i> prakashpaul011@email.com</p>
+          </div>
         </div>
+        <div class="invoice-title-block">
+          <div class="invoice-badge">ক্যাশ মেমো / ইনভয়েস</div>
+          <p style="margin-top: 5px;"><strong>ইনভয়েস নং:</strong> <input type="text" id="invNo" class="form-control" style="width: 110px; display: inline-block;" value="PP-1001"></p>
+          <p><strong>তারিখ:</strong> <input type="date" id="invDate" class="form-control" style="width: 140px; display: inline-block;"></p>
+        </div>
+      </div>
+
+      <!-- Customer Details -->
+      <div class="customer-grid">
+        <div class="form-group">
+          <label><i class="fa-solid fa-school"></i> প্রতিষ্ঠান / ক্লায়েন্টের নাম:</label>
+          <input type="text" id="clientName" class="form-control" placeholder="যেমন: চকবাজার সরকারি প্রাথমিক বিদ্যালয়">
+        </div>
+        <div class="form-group">
+          <label><i class="fa-solid fa-map-marker-alt"></i> ঠিকানা (জেলা/উপজেলাসহ):</label>
+          <input type="text" id="clientAddress" class="form-control" placeholder="যেমন: বাকলিয়া, চট্টগ্রাম">
+        </div>
+        <div class="form-group">
+          <label><i class="fa-solid fa-phone"></i> মোবাইল নম্বর:</label>
+          <input type="text" id="clientPhone" class="form-control" placeholder="017XXXXXXXX">
+        </div>
+        <div class="form-group">
+          <label><i class="fa-solid fa-graduation-cap"></i> শ্রেণি সিলেক্ট করুন:</label>
+          <select id="clientClass" class="form-control">
+            <option value="প্রথম শ্রেণি">প্রথম শ্রেণি</option>
+            <option value="দ্বিতীয় শ্রেণি">দ্বিতীয় শ্রেণি</option>
+            <option value="তৃতীয় শ্রেণি">তৃতীয় শ্রেণি</option>
+            <option value="চতুর্থ শ্রেণি">চতুর্থ শ্রেণি</option>
+            <option value="পঞ্চম শ্রেণি">পঞ্চম শ্রেণি</option>
+            <option value="ষষ্ঠ শ্রেণি">ষষ্ঠ শ্রেণি</option>
+            <option value="সপ্তম শ্রেণি">সপ্তম শ্রেণি</option>
+            <option value="অষ্টম শ্রেণি">অষ্টম শ্রেণি</option>
+            <option value="নবম-দশম শ্রেণি">নবম-দশম শ্রেণি</option>
+            <option value="একাদশ-দ্বাদশ শ্রেণি">একাদশ-দ্বাদশ শ্রেণি</option>
+            <option value="মাদ্রাসা/অন্যান্য">মাদ্রাসা / অন্যান্য</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Items Table -->
+      <div class="table-responsive">
+        <table class="invoice-table" id="itemsTable">
+          <thead>
+            <tr>
+              <th style="width: 5%;">#</th>
+              <th style="width: 45%;">বিষয় / কাজের বিবরণ</th>
+              <th style="width: 15%;">সংখ্যা/কপি</th>
+              <th style="width: 15%;">দর (টাকা)</th>
+              <th style="width: 15%;">মোট (টাকা)</th>
+              <th style="width: 5%;" class="no-print">মুছুন</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Dynamic Rows Will Be Added Here -->
+          </tbody>
+        </table>
+      </div>
+
+      <button class="btn-add-row no-print" onclick="addNewRow()">
+        <i class="fa-solid fa-plus-circle"></i> নতুন বিষয় / লাইন যোগ করুন
+      </button>
+
+      <!-- Summary Section -->
+      <div class="summary-box">
+        <table class="summary-table">
+          <tr>
+            <td>সর্বমোট (Subtotal):</td>
+            <td style="text-align: right;"><span id="subTotal">০.০০</span> ৳</td>
+          </tr>
+          <tr>
+            <td>ছাড় / ডিসকাউন্ট:</td>
+            <td style="text-align: right;"><input type="number" id="discountInput" class="form-control" style="width: 90px; text-align: right;" value="0" oninput="calculateInvoice()"> ৳</td>
+          </tr>
+          <tr class="total-row">
+            <td>নিট বিল:</td>
+            <td style="text-align: right;"><span id="netTotal">০.০০</span> ৳</td>
+          </tr>
+          <tr>
+            <td>জমা / পরিশোধ:</td>
+            <td style="text-align: right;"><input type="number" id="paidInput" class="form-control" style="width: 90px; text-align: right;" value="0" oninput="calculateInvoice()"> ৳</td>
+          </tr>
+          <tr>
+            <td><strong>বকেয়া / অবশিষ্ট:</strong></td>
+            <td style="text-align: right; color: var(--primary-red);"><strong id="dueAmount">০.০০</strong> ৳</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Signatures -->
+      <div class="invoice-footer-signatures">
+        <div class="sig-line">গ্রাহকের স্বাক্ষর</div>
+        <div class="sig-line">আদেশক্রমে: PP Compose & Printing Hub</div>
+      </div>
+
     </div>
 
-    <!-- DASHBOARD SCREEN -->
-    <div id="dashboard-screen" class="screen">
-        <div style="text-align: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">
-            <h3 style="font-size: 15px; color: #1e293b;">মার্কস ড্যাশবোর্ড প্যানেল</h3>
-            <p id="teacher-info" style="font-size: 11px; font-weight: bold; color: #475569; margin-top: 2px;"></p>
-        </div>
-
-        <div style="margin-top: 5px;">
-            <label>পরীক্ষার নাম:</label>
-            <select id="exam-select" onchange="loadSavedMarksPreview()"></select>
-
-            <label>বরাদ্দকৃত বিষয়:</label>
-            <select id="subject-select" onchange="updateSections()"></select>
-
-            <label>শাখা (Section):</label>
-            <select id="section-select" onchange="loadSavedMarksPreview()"></select>
-        </div>
-
-        <div class="btn-group">
-            <button class="btn btn-dark" onclick="openStudentMarksEntry()">মার্কস এন্ট্রি করুন</button>
-            <button class="btn btn-success" onclick="syncDashboardDataToCloud()">ফলাফল সেন্ড ☁</button>
-        </div>
-
-        <label style="margin-top: 10px;">সংরক্ষিত নম্বরের তালিকা:</label>
-        <div class="preview-box">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 45px;">রোল</th>
-                        <th>শিক্ষার্থীর নাম</th>
-                        <th style="width: 75px;" class="text-center">প্রাপ্ত নম্বর</th>
-                    </tr>
-                </thead>
-                <tbody id="preview-table-body">
-                </tbody>
-            </table>
-        </div>
-
-        <button class="btn btn-danger" style="margin-top: 10px; padding: 6px;" onclick="showScreen('login-screen')">লগআউট</button>
+    <!-- Action Buttons Bar -->
+    <div class="actions-bar no-print">
+      <button class="btn-action btn-print" onclick="processInvoiceAndSave()">
+        <i class="fa-solid fa-print"></i> প্রিন্ট / PDF সেভ এবং শিটে পাঠান
+      </button>
     </div>
+  </div>
 
-    <!-- MARKS ENTRY SCREEN -->
-    <div id="entry-screen" class="screen">
-        <div class="top-bar">
-            <button onclick="showScreen('dashboard-screen')">‹ ড্যাশবোর্ডে ফিরে যান</button>
-            <span style="font-size: 12px; font-weight: bold;">মার্কস এন্ট্রি প্যানেল</span>
-        </div>
-
-        <div id="entry-sub-header" style="text-align: center; font-size: 11px; font-weight: bold; color: #475569; margin-bottom: 8px;"></div>
-
-        <div class="preview-box">
-            <table>
-                <thead>
-                    <tr id="entry-table-header">
-                        <th style="width: 35px;">রোল</th>
-                        <th>শিক্ষার্থীর নাম</th>
-                        <th class="text-center" id="col-cq">CQ</th>
-                        <th class="text-center" id="col-mcq">MCQ</th>
-                        <th class="text-center" id="col-prac">PRAC</th>
-                        <th class="text-center" id="col-single" style="display:none;">প্রাপ্ত নম্বর</th>
-                        <th class="text-center" style="width: 40px;">Abs</th>
-                    </tr>
-                </thead>
-                <tbody id="entry-table-body">
-                </tbody>
-            </table>
-        </div>
-
-        <div class="btn-group">
-            <button class="btn btn-success" onclick="saveMarksAction()">নম্বর সংরক্ষণ করুন</button>
-            <button class="btn btn-danger" onclick="deleteMarksAction()">নম্বর মুছুন</button>
-        </div>
+  <!-- Modal for Google Sheet URL -->
+  <div class="modal" id="sheetModal">
+    <div class="modal-content">
+      <h3 style="color: var(--primary-blue); margin-bottom: 10px;"><i class="fa-solid fa-file-excel"></i> গুগল শিট কানেকশন সেটআপ</h3>
+      <p style="font-size: 14px; margin-bottom: 15px;">আপনার Google Apps Script Web App URL-টি নিচে পেস্ট করুন। এর ফলে প্রতিটি ইনভয়েস অটোমেটিক গুগল শিটে জমা হবে।</p>
+      <input type="text" id="scriptUrlInput" class="form-control" placeholder="https://script.google.com/macros/s/AKfycbz4sUFlz06HF-zbVPQ7kuN7clRqmwrcVyEAqfsUct_Q1oKnNgDspqGjGiTxwy43frTLWA/exec" style="width: 100%; margin-bottom: 15px;">
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button class="btn-nav" style="background: #777;" onclick="closeSheetModal()">বন্ধ করুন</button>
+        <button class="btn-nav btn-sheet" onclick="saveSheetUrl()">সেভ করুন</button>
+      </div>
     </div>
+  </div>
 
-    <!-- PROGRESS MODAL -->
-    <div id="progress-modal" class="modal-overlay">
-        <div class="modal-card">
-            <p style="font-size: 13px; font-weight: bold; color: #1e293b;" id="progress-title">গুগল শিটে দ্রুত ডেটা পাঠানো হচ্ছে...</p>
-            <div class="progress-bar">
-                <div id="progress-fill" class="progress-fill"></div>
-            </div>
-            <p id="progress-text" style="font-size: 12px; color: #64748b;">প্রসেস করা হচ্ছে...</p>
-        </div>
-    </div>
-</div>
+  <script>
+    // List of standard subjects
+    const subjectsList = [
+      "বাংলা", "ইংরেজি", "গণিত", "পরিবেশ পরিচিতি", "অঙ্কন / শিল্পকলা",
+      "বাংলাদেশ ও বিশ্বপরিচয়", "প্রাথমিক বিজ্ঞান", "ইসলাম ও নৈতিক শিক্ষা",
+      "হিন্দুধর্ম ও নৈতিক শিক্ষা", "বৌদ্ধধর্ম ও নৈতিক শিক্ষা", "খ্রিস্টধর্ম ও নৈতিক শিক্ষা",
+      "বাংলা ১ম পত্র", "বাংলা ২য় পত্র", "ইংরেজি ১ম পত্র", "ইংরেজি ২য় পত্র",
+      "বিজ্ঞান", "তথ্য ও যোগাযোগ প্রযুক্তি (আইসিটি)", "কৃষি শিক্ষা", "গার্হস্থ্য বিজ্ঞান",
+      "পদার্থবিজ্ঞান", "রসায়ন", "জীববিজ্ঞান", "উচ্চতর গণিত", "ইতিহাস ও বিশ্বসভ্যতা",
+      "ভূগোল ও পরিবেশ", "অর্থনীতি", "পৌরনীতি ও নাগরিকতা", "হিসাববিজ্ঞান",
+      "ব্যবসায় উদ্যোগ", "ফিন্যান্স ও ব্যাংকিং", "অন্যান্য (কাস্টম বিষয়)"
+    ];
 
-<script>
-    // --- Local Storage Initialization ---
-    function initDatabase() {
-        if (!localStorage.getItem("school_settings")) {
-            localStorage.setItem("school_settings", JSON.stringify({ school_name: "আমার বিদ্যালয়" }));
-        }
-        if (!localStorage.getItem("teachers")) {
-            localStorage.setItem("teachers", JSON.stringify([
-                { username: "admin", password: "1234", name: "সুনীল কান্তি দে", id: "0", designation: "প্রধান শিক্ষক" }
-            ]));
-        }
-        if (!localStorage.getItem("teacher_assignments")) {
-            localStorage.setItem("teacher_assignments", JSON.stringify([
-                { teacher_id: "0", exam_type: "বার্ষিক পরীক্ষা", class_name: "10", subject_name: "বাংলা ১ম পত্র", subject_code: "101", section_name: "A" }
-            ]));
-        }
-        if (!localStorage.getItem("students")) {
-            localStorage.setItem("students", JSON.stringify([
-                { roll: "1", name: "রহিম আহমেদ", section: "A", class_name: "10", religion: "ইসলাম", department: "বিজ্ঞান" },
-                { roll: "2", name: "করিম উল্লাহ", section: "A", class_name: "10", religion: "ইসলাম", department: "বিজ্ঞান" },
-                { roll: "3", name: "সুমিত দাশ", section: "A", class_name: "10", religion: "হিন্দু", department: "বিজ্ঞান" }
-            ]));
-        }
-        if (!localStorage.getItem("subject_marks_config")) {
-            localStorage.setItem("subject_marks_config", JSON.stringify([
-                { class_name: "10", subject_code: "101", written_marks: 70, mcq_marks: 30, practical_marks: 0 }
-            ]));
-        }
-        if (!localStorage.getItem("marks_store")) {
-            localStorage.setItem("marks_store", JSON.stringify([]));
-        }
+    // Convert English numbers to Bengali numerals
+    function toBengaliNumerals(num) {
+      const bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+      return num.toString().replace(/\d/g, d => bnDigits[d]);
     }
 
-    initDatabase();
+    // Set today's date
+    document.getElementById('invDate').valueAsDate = new Date();
 
-    let loggedInTeacher = { name: "", username: "", id: "", designation: "" };
-    
-    // আপনার তৈরি করা গুগল অ্যাপস স্ক্রিপ্টের Web App URL
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzz2WKsrleyRyPhBzlDVTgenIihMkwXKII3Jh5Jf5j11005bVJMfo6bPBFWJb1KFg/exec";
+    // Initialize Page
+    window.onload = function() {
+      // Load saved logo if available
+      const savedLogo = localStorage.getItem('pp_custom_logo');
+      if (savedLogo) {
+        document.getElementById('mainLogo').src = savedLogo;
+        document.getElementById('invoiceLogo').src = savedLogo;
+      }
+      
+      // Load saved Google Sheet URL
+      const savedSheetUrl = localStorage.getItem('pp_sheet_url');
+      if (savedSheetUrl) {
+        document.getElementById('scriptUrlInput').value = savedSheetUrl;
+      }
 
-    // --- Screen Navigation ---
-    function showScreen(screenId) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(screenId).classList.add('active');
+      // Add default 2 rows
+      addNewRow();
+      addNewRow();
+    };
+
+    // Add row to table
+    function addNewRow() {
+      const tbody = document.getElementById('tableBody');
+      const rowCount = tbody.children.length + 1;
+      const tr = document.createElement('tr');
+
+      let subjectOptions = `<option value="">-- বিষয় নির্বাচন করুন --</option>`;
+      subjectsList.forEach(sub => {
+        subjectOptions += `<option value="${sub}">${sub}</option>`;
+      });
+
+      tr.innerHTML = `
+        <td>${toBengaliNumerals(rowCount)}</td>
+        <td>
+          <select class="form-control subject-select" onchange="handleSubjectChange(this)">
+            ${subjectOptions}
+          </select>
+          <input type="text" class="form-control custom-subject-input" placeholder="কাস্টম বিষয়ের নাম লিখুন...">
+        </td>
+        <td><input type="number" class="form-control qty-input" value="1" min="1" oninput="calculateInvoice()"></td>
+        <td><input type="number" class="form-control rate-input" value="0" min="0" oninput="calculateInvoice()"></td>
+        <td class="row-total">০.০০ ৳</td>
+        <td class="no-print"><button class="btn-delete" onclick="removeRow(this)"><i class="fa-solid fa-trash"></i></button></td>
+      `;
+      tbody.appendChild(tr);
+      calculateInvoice();
     }
 
-    // --- Authentication ---
-    function handleLogin() {
-        const u = document.getElementById("username").value.trim();
-        const p = document.getElementById("password").value.trim();
+    // Handle Custom Subject reveal
+    function handleSubjectChange(selectElem) {
+      const customInput = selectElem.nextElementSibling;
+      if (selectElem.value === "অন্যান্য (কাস্টম বিষয়)") {
+        customInput.style.display = "block";
+      } else {
+        customInput.style.display = "none";
+      }
+      calculateInvoice();
+    }
 
-        if (!u || !p) {
-            alert("দয়া করে ইউজারনেম এবং পাসওয়ার্ড দিন!");
-            return;
+    // Remove row
+    function removeRow(btn) {
+      btn.closest('tr').remove();
+      calculateInvoice();
+    }
+
+    // Calculate invoice totals
+    function calculateInvoice() {
+      const rows = document.querySelectorAll('#tableBody tr');
+      let subTotal = 0;
+
+      rows.forEach((row, idx) => {
+        const qty = parseFloat(row.querySelector('.qty-input').value) || 0;
+        const rate = parseFloat(row.querySelector('.rate-input').value) || 0;
+        const total = qty * rate;
+        subTotal += total;
+
+        row.querySelector('.row-total').innerText = toBengaliNumerals(total.toFixed(2)) + ' ৳';
+      });
+
+      const discount = parseFloat(document.getElementById('discountInput').value) || 0;
+      const netTotal = Math.max(0, subTotal - discount);
+      const paid = parseFloat(document.getElementById('paidInput').value) || 0;
+      const due = Math.max(0, netTotal - paid);
+
+      document.getElementById('subTotal').innerText = toBengaliNumerals(subTotal.toFixed(2));
+      document.getElementById('netTotal').innerText = toBengaliNumerals(netTotal.toFixed(2));
+      document.getElementById('dueAmount').innerText = toBengaliNumerals(due.toFixed(2));
+    }
+
+    // Custom Logo Upload
+    function uploadLogo(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          const imgData = evt.target.result;
+          document.getElementById('mainLogo').src = imgData;
+          document.getElementById('invoiceLogo').src = imgData;
+          localStorage.setItem('pp_custom_logo', imgData);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Modal Control
+    function openSheetModal() { document.getElementById('sheetModal').style.display = 'flex'; }
+    function closeSheetModal() { document.getElementById('sheetModal').style.display = 'none'; }
+    function saveSheetUrl() {
+      const url = document.getElementById('scriptUrlInput').value.trim();
+      localStorage.setItem('pp_sheet_url', url);
+      alert('গুগল শিট URL সংরক্ষণ করা হয়েছে!');
+      closeSheetModal();
+    }
+
+    // Process Invoice: Send to Google Sheet & Trigger Print
+    function processInvoiceAndSave() {
+      const sheetUrl = localStorage.getItem('pp_sheet_url');
+      
+      // Compile items breakdown text
+      let itemsListText = [];
+      document.querySelectorAll('#tableBody tr').forEach(row => {
+        const sel = row.querySelector('.subject-select').value;
+        const cust = row.querySelector('.custom-subject-input').value;
+        const subjectName = (sel === "অন্যান্য (কাস্টম বিষয়)") ? (cust || "অন্যান্য") : sel;
+        const qty = row.querySelector('.qty-input').value;
+        const rate = row.querySelector('.rate-input').value;
+        if (subjectName) {
+          itemsListText.push(`${subjectName} (${qty}টি x ${rate}৳)`);
         }
+      });
 
-        const teachers = JSON.parse(localStorage.getItem("teachers") || "[]");
-        const found = teachers.find(t => (t.username === u || t.id === u) && t.password === p);
+      const payload = {
+        invoice_no: document.getElementById('invNo').value,
+        date: document.getElementById('invDate').value,
+        client_name: document.getElementById('clientName').value,
+        client_address: document.getElementById('clientAddress').value,
+        client_phone: document.getElementById('clientPhone').value,
+        client_class: document.getElementById('clientClass').value,
+        items: itemsListText.join(', '),
+        net_total: document.getElementById('netTotal').innerText,
+        paid: document.getElementById('paidInput').value,
+        due: document.getElementById('dueAmount').innerText
+      };
 
-        if (found) {
-            loggedInTeacher = found;
-            createDashboard();
-        } else if (u === "admin" && p === "1234") {
-            loggedInTeacher = { name: "সুনীল কান্তি দে", id: "0", designation: "প্রধান শিক্ষক", username: "admin" };
-            createDashboard();
-        } else {
-            alert("ভুল ইউজারনেম বা পাসওয়ার্ড!");
-        }
+      // Send to Google Sheet if URL is present
+      if (sheetUrl) {
+        fetch(sheetUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).then(() => {
+          console.log('Data sent to Google Sheet successfully.');
+        }).catch(err => console.error('Error sending to Sheet:', err));
+      }
+
+      // Trigger Print
+      window.print();
     }
-
-    // --- Dashboard logic ---
-    function createDashboard() {
-        const settings = JSON.parse(localStorage.getItem("school_settings") || "{}");
-        document.getElementById("login-school-name").innerText = settings.school_name || "আমার বিদ্যালয়";
-        
-        let desigText = loggedInTeacher.designation ? ` (${loggedInTeacher.designation})` : '';
-        document.getElementById("teacher-info").innerText = `শিক্ষক: ${loggedInTeacher.name}${desigText}`;
-
-        loadTeacherAssignments();
-        showScreen("dashboard-screen");
-    }
-
-    function loadTeacherAssignments() {
-        const assignments = JSON.parse(localStorage.getItem("teacher_assignments") || "[]");
-        
-        // ফিল্টার: অ্যাডমিন হলে সব দেখাবে, অন্যথায় শুধু শিক্ষকের নিজস্ব অ্যাসাইনমেন্ট
-        const filteredAssignments = (loggedInTeacher.id === "0" || !loggedInTeacher.id) 
-            ? assignments 
-            : assignments.filter(a => String(a.teacher_id) === String(loggedInTeacher.id));
-
-        const exams = [...new Set(filteredAssignments.map(a => a.exam_type))];
-        const subjects = [...new Set(filteredAssignments.map(a => `ক্লাস: ${a.class_name} | বিষয়: ${a.subject_name} — কোড: ${a.subject_code}`))];
-
-        const examSelect = document.getElementById("exam-select");
-        examSelect.innerHTML = (exams.length ? exams : ["বার্ষিক পরীক্ষা"]).map(e => `<option value="${e}">${e}</option>`).join("");
-
-        const subSelect = document.getElementById("subject-select");
-        subSelect.innerHTML = (subjects.length ? subjects : ["বরাদ্দকৃত কোনো বিষয় পাওয়া যায়নি"]).map(s => `<option value="${s}">${s}</option>`).join("");
-
-        updateSections();
-    }
-
-    function updateSections() {
-        const selectedSub = document.getElementById("subject-select").value;
-        let targetClass = "";
-        if (selectedSub.includes("|")) {
-            targetClass = selectedSub.split("|")[0].replace("ক্লাস:", "").trim();
-        }
-
-        const assignments = JSON.parse(localStorage.getItem("teacher_assignments") || "[]");
-        const sections = [...new Set(assignments.filter(a => a.class_name === targetClass).map(a => a.section_name))];
-
-        const secSelect = document.getElementById("section-select");
-        secSelect.innerHTML = (sections.length ? sections : ["A"]).map(s => `<option value="${s}">${s}</option>`).join("");
-
-        loadSavedMarksPreview();
-    }
-
-    function parseSubjectString(str) {
-        let cleanSubject = str.trim();
-        let targetClass = "";
-        let targetCode = "";
-
-        if (str.includes("|")) {
-            const parts = str.split("|");
-            targetClass = parts[0].replace("ক্লাস:", "").trim();
-            cleanSubject = parts[1].trim();
-        }
-        if (cleanSubject.includes("— কোড:")) {
-            targetCode = cleanSubject.split("— কোড:")[1].trim();
-            cleanSubject = cleanSubject.split("— কোড:")[0].replace("বিষয়:", "").trim();
-        }
-
-        return { targetClass, targetCode, cleanSubject };
-    }
-
-    function loadSavedMarksPreview() {
-        const exam = document.getElementById("exam-select").value;
-        const subStr = document.getElementById("subject-select").value;
-        const section = document.getElementById("section-select").value;
-
-        const { targetClass, cleanSubject } = parseSubjectString(subStr);
-
-        const students = JSON.parse(localStorage.getItem("students") || "[]").filter(s => s.class_name === targetClass && s.section === section);
-        const marksStore = JSON.parse(localStorage.getItem("marks_store") || "[]");
-
-        const tbody = document.getElementById("preview-table-body");
-        tbody.innerHTML = "";
-
-        if (students.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="3" class="text-center" style="color: #64748b;">কোনো শিক্ষার্থী পাওয়া যায়নি</td></tr>`;
-            return;
-        }
-
-        students.forEach(st => {
-            const record = marksStore.find(m => m.roll == st.roll && m.exam_type === exam && m.subject_name === cleanSubject && m.section === section && m.class_name === targetClass);
-            const val = record ? record.obtained_marks : "এন্ট্রি হয়নি";
-            const valStyle = val !== "এন্ট্রি হয়নি" ? "font-weight: bold; color: #0f172a;" : "color: #94a3b8;";
-
-            tbody.innerHTML += `
-                <tr>
-                    <td class="text-center">${st.roll}</td>
-                    <td>${st.name}</td>
-                    <td class="text-center" style="${valStyle}">${val}</td>
-                </tr>
-            `;
-        });
-    }
-
-    // --- Student Marks Entry ---
-    let currentEntryConfig = {};
-
-    function openStudentMarksEntry() {
-        const exam = document.getElementById("exam-select").value;
-        const subStr = document.getElementById("subject-select").value;
-        const section = document.getElementById("section-select").value;
-
-        if (subStr.includes("পাওয়া যায়নি")) {
-            alert("দয়া করে সঠিক বিষয় নির্বাচন করুন!");
-            return;
-        }
-
-        const { targetClass, targetCode, cleanSubject } = parseSubjectString(subStr);
-        const configs = JSON.parse(localStorage.getItem("subject_marks_config") || "[]");
-        const cfg = configs.find(c => c.class_name === targetClass && c.subject_code === targetCode) || { written_marks: 0, mcq_marks: 0, practical_marks: 0 };
-
-        currentEntryConfig = { exam, subStr, section, targetClass, targetCode, cleanSubject, ...cfg };
-
-        document.getElementById("entry-sub-header").innerText = `পরীক্ষা: ${exam} | ক্লাস: ${targetClass} | শাখা: ${section}`;
-
-        // Dynamic Header Setup
-        document.getElementById("col-cq").style.display = cfg.written_marks > 0 ? "" : "none";
-        document.getElementById("col-mcq").style.display = cfg.mcq_marks > 0 ? "" : "none";
-        document.getElementById("col-prac").style.display = cfg.practical_marks > 0 ? "" : "none";
-        document.getElementById("col-single").style.display = (cfg.written_marks === 0 && cfg.mcq_marks === 0 && cfg.practical_marks === 0) ? "" : "none";
-
-        const students = JSON.parse(localStorage.getItem("students") || "[]").filter(s => s.class_name === targetClass && s.section === section);
-        const marksStore = JSON.parse(localStorage.getItem("marks_store") || "[]");
-        const tbody = document.getElementById("entry-table-body");
-        tbody.innerHTML = "";
-
-        students.forEach(st => {
-            const record = marksStore.find(m => m.roll == st.roll && m.exam_type === exam && m.subject_name === cleanSubject && m.section === section && m.class_name === targetClass);
-            let savedVal = record ? record.obtained_marks : "";
-
-            let wVal = "", mVal = "", pVal = "", isAbs = savedVal === "ABSENT";
-            if (!isAbs && savedVal.includes("_")) {
-                const parts = savedVal.split("_");
-                wVal = parts[0] || "";
-                mVal = parts[1] || "";
-                pVal = parts[2] || "";
-            } else if (!isAbs) {
-                wVal = savedVal;
-            }
-
-            const disAttr = isAbs ? "disabled" : "";
-
-            tbody.innerHTML += `
-                <tr data-roll="${st.roll}">
-                    <td class="text-center">${st.roll}</td>
-                    <td>${st.name}</td>
-                    ${cfg.written_marks > 0 ? `<td class="text-center"><input type="text" class="entry-input in-w" value="${wVal}" ${disAttr}></td>` : ''}
-                    ${cfg.mcq_marks > 0 ? `<td class="text-center"><input type="text" class="entry-input in-m" value="${mVal}" ${disAttr}></td>` : ''}
-                    ${cfg.practical_marks > 0 ? `<td class="text-center"><input type="text" class="entry-input in-p" value="${pVal}" ${disAttr}></td>` : ''}
-                    ${(cfg.written_marks === 0 && cfg.mcq_marks === 0 && cfg.practical_marks === 0) ? `<td class="text-center"><input type="text" class="entry-input in-s" value="${wVal}" ${disAttr}></td>` : ''}
-                    <td class="text-center">
-                        <input type="checkbox" class="chk-abs" ${isAbs ? 'checked' : ''} onchange="toggleAbsent(this)">
-                    </td>
-                </tr>
-            `;
-        });
-
-        showScreen("entry-screen");
-    }
-
-    function toggleAbsent(chk) {
-        const row = chk.closest("tr");
-        const inputs = row.querySelectorAll("input[type='text']");
-        inputs.forEach(inp => {
-            inp.disabled = chk.checked;
-            if (chk.checked) inp.value = "";
-        });
-    }
-
-    function saveMarksAction() {
-        const { exam, section, targetClass, targetCode, cleanSubject, written_marks, mcq_marks, practical_marks } = currentEntryConfig;
-        let marksStore = JSON.parse(localStorage.getItem("marks_store") || "[]");
-
-        const rows = document.querySelectorAll("#entry-table-body tr");
-        rows.forEach(r => {
-            const roll = r.getAttribute("data-roll");
-            const isAbs = r.querySelector(".chk-abs").checked;
-
-            let mVal = "";
-            if (isAbs) {
-                mVal = "ABSENT";
-            } else {
-                if (written_marks === 0 && mcq_marks === 0 && practical_marks === 0) {
-                    mVal = r.querySelector(".in-s") ? r.querySelector(".in-s").value.trim() : "";
-                } else {
-                    const w = r.querySelector(".in-w") ? r.querySelector(".in-w").value.trim() || "0" : "0";
-                    const m = r.querySelector(".in-m") ? r.querySelector(".in-m").value.trim() || "0" : "0";
-                    const p = r.querySelector(".in-p") ? r.querySelector(".in-p").value.trim() || "0" : "0";
-                    if (r.querySelector(".in-w")?.value || r.querySelector(".in-m")?.value || r.querySelector(".in-p")?.value) {
-                        mVal = `${w}_${m}_${p}`;
-                    }
-                }
-            }
-
-            if (mVal) {
-                const existingIdx = marksStore.findIndex(m => m.roll == roll && m.exam_type === exam && m.subject_name === cleanSubject && m.section === section && m.class_name === targetClass);
-                const recordData = { roll: String(roll), exam_type: exam, subject_name: cleanSubject, subject_code: targetCode, section, class_name: targetClass, obtained_marks: mVal };
-
-                if (existingIdx >= 0) {
-                    marksStore[existingIdx] = recordData;
-                } else {
-                    marksStore.push(recordData);
-                }
-            }
-        });
-
-        localStorage.setItem("marks_store", JSON.stringify(marksStore));
-        alert("নম্বর সফলভাবে সংরক্ষিত ও আপডেট করা হয়েছে!");
-        createDashboard();
-    }
-
-    function deleteMarksAction() {
-        if (confirm("আপনি কি এই বিষয়ের সমস্ত নম্বর মুছে ফেলতে চান?")) {
-            const { exam, section, targetClass, cleanSubject } = currentEntryConfig;
-            let marksStore = JSON.parse(localStorage.getItem("marks_store") || "[]");
-
-            marksStore = marksStore.filter(m => !(m.exam_type === exam && m.subject_name === cleanSubject && m.section === section && m.class_name === targetClass));
-            localStorage.setItem("marks_store", JSON.stringify(marksStore));
-
-            alert("নম্বরগুলো সফলভাবে মুছে ফেলা হয়েছে!");
-            createDashboard();
-        }
-    }
-
-    // --- Fast Batch Cloud Sync ---
-    async function syncDashboardDataToCloud() {
-        const exam = document.getElementById("exam-select").value;
-        if (!exam) {
-            alert("অনুগ্রহ করে প্রথমে পরীক্ষার নাম সিলেক্ট করুন!");
-            return;
-        }
-
-        if (!confirm("আপনি কি এই পরীক্ষার সমস্ত সংরক্ষিত ফলাফল দ্রুত অনলাইন গুগল শিটে পাঠাতে চান?")) return;
-
-        const marksStore = JSON.parse(localStorage.getItem("marks_store") || "[]").filter(m => m.exam_type === exam);
-        const students = JSON.parse(localStorage.getItem("students") || "[]");
-
-        if (marksStore.length === 0) {
-            alert("শিটে পাঠানোর মতো এই পরীক্ষার কোনো সংরক্ষিত ফলাফল পাওয়া যায়নি!");
-            return;
-        }
-
-        const modal = document.getElementById("progress-modal");
-        const pFill = document.getElementById("progress-fill");
-        const pText = document.getElementById("progress-text");
-        
-        modal.style.display = "flex";
-        pFill.style.width = "30%";
-        pText.innerText = "ডেটা প্রস্তুত করা হচ্ছে...";
-
-        // ব্যাচ পে-লোড তৈরি
-        const payloadBatch = marksStore.map(m => {
-            const st = students.find(s => String(s.roll) === String(m.roll) && String(s.class_name) === String(m.class_name) && String(s.section) === String(m.section)) || {};
-
-            let written = 0, mcq = 0, prac = 0, totalMarks = 0;
-            if (m.obtained_marks === "ABSENT") {
-                totalMarks = "ABSENT";
-            } else if (String(m.obtained_marks).includes("_")) {
-                const parts = m.obtained_marks.split("_");
-                written = parseFloat(parts[0]) || 0;
-                mcq = parseFloat(parts[1]) || 0;
-                prac = parseFloat(parts[2]) || 0;
-                totalMarks = written + mcq + prac;
-            } else {
-                totalMarks = parseFloat(m.obtained_marks) || 0;
-            }
-
-            return {
-                id: `${m.class_name}_${m.section}_${m.roll}_${m.exam_type}_${m.subject_name}`,
-                exam_name: m.exam_type,
-                class_name: m.class_name,
-                section: m.section,
-                department: st.department || "",
-                subject_name: m.subject_name,
-                subject_code: m.subject_code || "",
-                student_id: "",
-                roll: m.roll,
-                name: st.name || "",
-                written: written,
-                mcq: mcq,
-                practical: prac,
-                total: totalMarks
-            };
-        });
-
-        pFill.style.width = "70%";
-        pText.innerText = "গুগল শিটে সার্ভারে পাঠানো হচ্ছে...";
-
-        try {
-            await fetch(WEB_APP_URL, {
-                method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "text/plain" },
-                body: JSON.stringify(payloadBatch)
-            });
-
-            pFill.style.width = "100%";
-            pText.innerText = "১০০% সম্পন্ন!";
-
-            setTimeout(() => {
-                modal.style.display = "none";
-                alert(`সফলভাবে মোট ${payloadBatch.length} টি ফলাফল অনলাইন গুগল শিটে আপডেট করা হয়েছে!`);
-            }, 500);
-
-        } catch (err) {
-            console.error("Sync error:", err);
-            modal.style.display = "none";
-            alert("গুগল শিটে ডেটা পাঠাতে সমস্যা হয়েছে। ইন্টারনেট কানেকশন যাচাই করুন!");
-        }
-    }
-</script>
-
+  </script>
 </body>
 </html>
