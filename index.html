@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PP COMPOSE & PRINTING HUB - ডিজিটাল ইনভয়েস ও অনলাইন সেবাসমূহ</title>
+  <title>PP COMPOSE & PRINTING HUB - আপনার সফল প্রিন্টিং ও কম্পোজ কাজের নির্ভরযোগ্য সঙ্গী</title>
+  
   <!-- Google Fonts: Hind Siliguri -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
@@ -17,6 +19,7 @@
       --dark-red: #9A0007;
       --primary-blue: #0D47A1;
       --light-bg: #F8F9FA;
+      --card-bg: #FFFFFF;
       --border-color: #E0E0E0;
       --text-color: #212121;
     }
@@ -26,6 +29,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Hind Siliguri', sans-serif;
+      scroll-behavior: smooth;
     }
 
     body {
@@ -34,10 +38,26 @@
       line-height: 1.6;
     }
 
+    /* Top Utility Bar */
+    .top-bar {
+      background: var(--primary-blue);
+      color: white;
+      padding: 6px 20px;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .top-bar div {
+      display: flex;
+      gap: 15px;
+    }
+
     /* Navigation Bar */
     .navbar {
       background-color: #FFFFFF;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
       position: sticky;
       top: 0;
       z-index: 1000;
@@ -57,6 +77,7 @@
       display: flex;
       align-items: center;
       gap: 15px;
+      text-decoration: none;
     }
 
     .logo-img {
@@ -77,6 +98,25 @@
       font-weight: 600;
     }
 
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      font-size: 15px;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary-red);
+    }
+
     .nav-actions {
       display: flex;
       gap: 10px;
@@ -91,7 +131,7 @@
       border-radius: 6px;
       font-weight: 600;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 13px;
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -111,32 +151,141 @@
 
     /* Hero Banner */
     .hero-banner {
-      background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-blue) 100%);
+      background: linear-gradient(135deg, rgba(211, 47, 47, 0.95) 0%, rgba(13, 71, 161, 0.95) 100%),
+                  url('https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?auto=format&fit=crop&w=1200&q=80') center/cover;
       color: white;
-      padding: 30px 20px;
+      padding: 60px 20px;
       text-align: center;
     }
 
     .hero-banner h2 {
-      font-size: 26px;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .hero-banner p.slogan {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 25px;
+      color: #FFEB3B;
+    }
+
+    .notice-badge {
+      max-width: 850px;
+      margin: 0 auto 25px auto;
+      background: rgba(255,255,255,0.18);
+      padding: 15px 25px;
+      border-radius: 50px;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.3);
+      font-size: 16px;
+    }
+
+    .hero-btn-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .btn-hero {
+      padding: 12px 28px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    .btn-hero-primary {
+      background: white;
+      color: var(--primary-red);
+    }
+    .btn-hero-primary:hover {
+      background: #f0f0f0;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .btn-hero-secondary {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+    .btn-hero-secondary:hover {
+      background: white;
+      color: var(--primary-blue);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1150px;
+      margin: 40px auto;
+      padding: 0 15px;
+    }
+
+    /* Section Title */
+    .section-title {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .section-title h2 {
+      font-size: 28px;
+      color: var(--primary-blue);
+      position: relative;
+      display: inline-block;
+      padding-bottom: 8px;
+    }
+
+    .section-title h2::after {
+      content: '';
+      position: absolute;
+      width: 60px;
+      height: 3.5px;
+      background: var(--primary-red);
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+
+    /* Services Grid */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+    }
+
+    .service-card {
+      background: white;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      border: 1px solid var(--border-color);
+      transition: transform 0.3s, box-shadow 0.3s;
+      border-top: 4px solid var(--primary-red);
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    }
+
+    .service-icon {
+      font-size: 36px;
+      color: var(--primary-red);
+      margin-bottom: 15px;
+    }
+
+    .service-card h3 {
+      font-size: 20px;
+      color: var(--primary-blue);
       margin-bottom: 10px;
     }
 
-    .hero-banner p {
-      font-size: 16px;
-      max-width: 800px;
-      margin: 0 auto;
-      background: rgba(255,255,255,0.15);
-      padding: 10px 20px;
-      border-radius: 30px;
-      backdrop-filter: blur(5px);
-    }
-
-    /* Main Layout */
-    .container {
-      max-width: 1100px;
-      margin: 30px auto;
-      padding: 0 15px;
+    .service-card p {
+      font-size: 14px;
+      color: #555;
     }
 
     /* Invoice Container */
@@ -144,7 +293,7 @@
       background: white;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      padding: 30px;
+      padding: 35px;
       border: 1px solid var(--border-color);
     }
 
@@ -164,7 +313,7 @@
     }
 
     .invoice-brand img {
-      max-height: 70px;
+      max-height: 75px;
     }
 
     .shop-info h2 {
@@ -198,7 +347,7 @@
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 15px;
       background: #FFF8F8;
-      padding: 15px;
+      padding: 18px;
       border-radius: 8px;
       border: 1px solid #FFEBEE;
       margin-bottom: 25px;
@@ -260,7 +409,7 @@
       background: var(--primary-blue);
       color: white;
       border: none;
-      padding: 8px 16px;
+      padding: 9px 18px;
       border-radius: 5px;
       cursor: pointer;
       font-weight: 600;
@@ -349,6 +498,42 @@
       background: var(--dark-red);
     }
 
+    /* Contact Cards */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .contact-card {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      border-left: 4px solid var(--primary-blue);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .contact-card i {
+      font-size: 24px;
+      color: var(--primary-blue);
+      margin-bottom: 10px;
+    }
+
+    .contact-card h4 {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--primary-blue);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 50px;
+      font-size: 14px;
+    }
+
     /* Modal for Google Sheet Setup */
     .modal {
       display: none;
@@ -368,13 +553,13 @@
       width: 90%;
     }
 
-    /* PRINT MEDIA QUERY (A4 Size) */
+    /* PRINT MEDIA QUERY (A4 Size Print) */
     @media print {
       body {
         background: white;
         color: black;
       }
-      .navbar, .hero-banner, .actions-bar, .btn-add-row, .btn-delete, .no-print {
+      .top-bar, .navbar, .hero-banner, #services, #contact, footer, .actions-bar, .btn-add-row, .btn-delete, .no-print {
         display: none !important;
       }
       .container {
@@ -406,19 +591,39 @@
 </head>
 <body>
 
+  <!-- Top Utility Bar -->
+  <div class="top-bar no-print">
+    <div>
+      <span><i class="fa-solid fa-location-dot"></i> বাকলিয়া, চকবাজার, চট্টগ্রাম</span>
+      <span><i class="fa-solid fa-phone"></i> ০১৭৭৯-৯OD৩27</span>
+      <span><i class="fa-solid fa-envelope"></i> prakashpaul011@email.com</span>
+    </div>
+    <div>
+      <span><i class="fa-solid fa-truck-fast"></i> সমগ্র বাংলাদেশে কুরিয়ার ও অনলাইন ডেলিভারি</span>
+    </div>
+  </div>
+
   <!-- Navigation Bar -->
-  <nav class="navbar">
+  <nav class="navbar no-print">
     <div class="nav-container">
-      <div class="brand-logo-container">
-        <img id="mainLogo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23D32F2F'/><text x='50' y='62' font-size='40' font-weight='bold' fill='white' text-anchor='middle'>PP</text></svg>" alt="Logo" class="logo-img">
+      <a href="#home" class="brand-logo-container">
+        <img id="mainLogo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23D32F2F'/><text x='50' y='62' font-size='40' font-weight='bold' fill='white' text-anchor='middle'>PP</text></svg>" alt="PP Logo" class="logo-img">
         <div class="shop-title">
           <h1>PP COMPOSE & PRINTING HUB</h1>
           <p>Quality Print Better Service</p>
         </div>
-      </div>
-      <div class="nav-actions no-print">
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#home">হোম</a></li>
+        <li><a href="#services">আমাদের সেবাসমূহ</a></li>
+        <li><a href="#invoice">ইনভয়েস মেকার</a></li>
+        <li><a href="#contact">যোগাযোগ</a></li>
+      </ul>
+
+      <div class="nav-actions">
         <button class="btn-nav btn-sheet" onclick="openSheetModal()">
-          <i class="fa-solid fa-file-excel"></i> গুগল শিট লিংক করুন
+          <i class="fa-solid fa-file-excel"></i> গুগল শিট কানেক্ট করুন
         </button>
         <label class="btn-nav" style="cursor: pointer;">
           <i class="fa-solid fa-image"></i> লোগো চেঞ্জ
@@ -428,20 +633,73 @@
     </div>
   </nav>
 
-  <!-- Hero Banner -->
-  <section class="hero-banner no-print">
-    <h2>অনলাইন কম্পিউটার কম্পোজ ও প্রশ্নপত্র প্রিন্টিং সার্ভিস</h2>
-    <p><i class="fa-solid fa-globe"></i> সমগ্র বাংলাদেশের যেকোনো প্রাইমারি স্কুল, হাই স্কুল, কলেজ ও মাদ্রাসার প্রশ্নপত্র, লেকচার শিট ও গাইডের অনলাইন প্রিন্টিং ও ডেলিভারি সেবা দেওয়া হয়।</p>
+  <!-- Hero Section -->
+  <section id="home" class="hero-banner no-print">
+    <h2>PP COMPOSE & PRINTING HUB</h2>
+    <p class="slogan">Quality Print Better Service — আপনার সকল প্রিন্টিং ও কম্পোজ কাজের নির্ভরযোগ্য সঙ্গী</p>
+    
+    <div class="notice-badge">
+      <i class="fa-solid fa-bullhorn" style="color: #FFEB3B; margin-right: 8px;"></i>
+      <strong>সারাদেশে অনলাইন সার্ভিস:</strong> সমগ্র বাংলাদেশের যেকোনো প্রাইমারি, হাই স্কুল, কলেজ ও মাদ্রাসার প্রশ্নপত্র, লেকচার শিট, নোট ও গাইড টাইপিং, প্রিন্ট এবং কুরিয়ার/অনলাইন সার্ভিস দেওয়া হয়।
+    </div>
+
+    <div class="hero-btn-group">
+      <a href="#invoice" class="btn-hero btn-hero-primary"><i class="fa-solid fa-file-invoice"></i> ইনভয়েস তৈরি করুন</a>
+      <a href="#services" class="btn-hero btn-hero-secondary"><i class="fa-solid fa-list-check"></i> সেবাসমূহ দেখুন</a>
+    </div>
   </section>
 
-  <!-- Main Invoice Area -->
-  <div class="container">
+  <!-- Services Section -->
+  <section id="services" class="container no-print">
+    <div class="section-title">
+      <h2>আমাদের সেবাসমূহ</h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <i class="fa-solid fa-file-pen service-icon"></i>
+        <h3>প্রশ্নপত্র সেটআপ ও কম্পোজ</h3>
+        <p>প্রাইমারি, হাই স্কুল, কলেজ ও মাদ্রাসার নির্ভুল প্রশ্নপত্র টাইপিং, বাংলা-ইংরেজি ফরম্যাটিং ও সুনির্দিষ্ট প্রিন্টিং প্রস্তুতকরণ।</p>
+      </div>
+      <div class="service-card">
+        <i class="fa-solid fa-book-open service-icon"></i>
+        <h3>লেকচার শিট ও গাইড বই</h3>
+        <p>যেকোনো বিষয়ের সাজানো লেকচার শিট, হ্যান্ডআউট, সাজেশন ও গাইড বুক কম্পিউটার কম্পোজ এবং দ্রুত প্রিন্ট।</p>
+      </div>
+      <div class="service-card">
+        <i class="fa-solid fa-print service-icon"></i>
+        <h3>হাই-স্পিড প্রিন্ট ও ফটোকপি</h3>
+        <p>উন্নত মানের কালার ও ব্ল্যাক অ্যান্ড হোয়াইট ফটোকপি ও প্রিন্টিং সুবিধা, যা দীর্ঘস্থায়ী ও স্পষ্ট।</p>
+      </div>
+      <div class="service-card">
+        <i class="fa-solid fa-layer-group service-icon"></i>
+        <h3>ল্যামিনেশন ও বাঁধাই</h3>
+        <p>যেকোনো সাইজের ফাইল, লেকচার শিট, প্রশ্নপত্র ল্যামিনেশন, স্পাইরাল বাঁধাই ও প্রফেশনাল হার্ড বাঁধাই সেবা।</p>
+      </div>
+      <div class="service-card">
+        <i class="fa-solid fa-laptop-code service-icon"></i>
+        <h3>অনলাইন আবেদন ও কম্পিউটার সেবা</h3>
+        <p>স্কুল-কলেজ ভর্তি, সরকারি/বেসরকারি চাকরি আবেদন, রেজাল্ট শিট প্রসেসিং ও যাবতীয় অনলাইন ফরম পূরণ।</p>
+      </div>
+      <div class="service-card">
+        <i class="fa-solid fa-truck-ramp-box service-icon"></i>
+        <h3>অনলাইন অর্ডার ও কুরিয়ার সার্ভিস</h3>
+        <p>সারাদেশের যেকোনো প্রান্ত থেকে ইমেইল বা হোয়াটসঅ্যাপে ফাইল পাঠিয়ে অর্ডারের মাধ্যমে কুরিয়ারে দ্রুত ডেলিভারি সুবিধা।</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Invoice Generator Area -->
+  <section id="invoice" class="container">
+    <div class="section-title no-print">
+      <h2>ইনভয়েস মেকার (Invoice Generator)</h2>
+    </div>
+
     <div class="invoice-card" id="invoiceArea">
       
-      <!-- Invoice Header -->
+      <!-- Invoice Printable Header -->
       <div class="invoice-header">
         <div class="invoice-brand">
-          <img id="invoiceLogo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23D32F2F'/><text x='50' y='62' font-size='40' font-weight='bold' fill='white' text-anchor='middle'>PP</text></svg>" alt="Logo">
+          <img id="invoiceLogo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23D32F2F'/><text x='50' y='62' font-size='40' font-weight='bold' fill='white' text-anchor='middle'>PP</text></svg>" alt="PP Logo">
           <div class="shop-info">
             <h2>PP COMPOSE & PRINTING HUB</h2>
             <p><i class="fa-solid fa-location-dot"></i> বাকলিয়া, চকবাজার, চট্টগ্রাম (সারাদেশে অনলাইন অর্ডার গ্রহণ করা হয়)</p>
@@ -450,12 +708,12 @@
         </div>
         <div class="invoice-title-block">
           <div class="invoice-badge">ক্যাশ মেমো / ইনভয়েস</div>
-          <p style="margin-top: 5px;"><strong>ইনভয়েস নং:</strong> <input type="text" id="invNo" class="form-control" style="width: 110px; display: inline-block;" value="PP-1001"></p>
+          <p style="margin-top: 5px;"><strong>মেমো নং:</strong> <input type="text" id="invNo" class="form-control" style="width: 110px; display: inline-block;" value="PP-1001"></p>
           <p><strong>তারিখ:</strong> <input type="date" id="invDate" class="form-control" style="width: 140px; display: inline-block;"></p>
         </div>
       </div>
 
-      <!-- Customer Details -->
+      <!-- Customer Details Grid -->
       <div class="customer-grid">
         <div class="form-group">
           <label><i class="fa-solid fa-school"></i> প্রতিষ্ঠান / ক্লায়েন্টের নাম:</label>
@@ -501,13 +759,13 @@
             </tr>
           </thead>
           <tbody id="tableBody">
-            <!-- Dynamic Rows Will Be Added Here -->
+            <!-- Dynamic Rows -->
           </tbody>
         </table>
       </div>
 
       <button class="btn-add-row no-print" onclick="addNewRow()">
-        <i class="fa-solid fa-plus-circle"></i> নতুন বিষয় / লাইন যোগ করুন
+        <i class="fa-solid fa-plus-circle"></i> নতুন বিষয় / কাজ যোগ করুন
       </button>
 
       <!-- Summary Section -->
@@ -519,7 +777,7 @@
           </tr>
           <tr>
             <td>ছাড় / ডিসকাউন্ট:</td>
-            <td style="text-align: right;"><input type="number" id="discountInput" class="form-control" style="width: 90px; text-align: right;" value="0" oninput="calculateInvoice()"> ৳</td>
+            <td style="text-align: right;"><input type="number" id="discountInput" class="form-control" style="width: 95px; text-align: right;" value="0" oninput="calculateInvoice()"> ৳</td>
           </tr>
           <tr class="total-row">
             <td>নিট বিল:</td>
@@ -527,7 +785,7 @@
           </tr>
           <tr>
             <td>জমা / পরিশোধ:</td>
-            <td style="text-align: right;"><input type="number" id="paidInput" class="form-control" style="width: 90px; text-align: right;" value="0" oninput="calculateInvoice()"> ৳</td>
+            <td style="text-align: right;"><input type="number" id="paidInput" class="form-control" style="width: 95px; text-align: right;" value="0" oninput="calculateInvoice()"> ৳</td>
           </tr>
           <tr>
             <td><strong>বকেয়া / অবশিষ্ট:</strong></td>
@@ -550,14 +808,43 @@
         <i class="fa-solid fa-print"></i> প্রিন্ট / PDF সেভ এবং শিটে পাঠান
       </button>
     </div>
-  </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="container no-print">
+    <div class="section-title">
+      <h2>যোগাযোগ ও অর্ডার ডেক্স</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <i class="fa-solid fa-location-dot"></i>
+        <h4>দোকানের ঠিকানা</h4>
+        <p>বাকলিয়া, চকবাজার, চট্টগ্রাম।</p>
+      </div>
+      <div class="contact-card">
+        <i class="fa-solid fa-phone"></i>
+        <h4>মোবাইল ও ওয়াটসঅ্যাপ</h4>
+        <p>01779987327 (সরাসরি কল বা ফাইল পাঠাতে)</p>
+      </div>
+      <div class="contact-card">
+        <i class="fa-solid fa-envelope"></i>
+        <h4>ইমেইল ঠিকানা</h4>
+        <p>prakashpaul011@email.com</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="no-print">
+    <p>&copy; 2026 PP COMPOSE & PRINTING HUB | Quality Print Better Service | সর্বস্বত্ব সংরক্ষিত।</p>
+  </footer>
 
   <!-- Modal for Google Sheet URL -->
   <div class="modal" id="sheetModal">
     <div class="modal-content">
       <h3 style="color: var(--primary-blue); margin-bottom: 10px;"><i class="fa-solid fa-file-excel"></i> গুগল শিট কানেকশন সেটআপ</h3>
-      <p style="font-size: 14px; margin-bottom: 15px;">আপনার Google Apps Script Web App URL-টি নিচে পেস্ট করুন। এর ফলে প্রতিটি ইনভয়েস অটোমেটিক গুগল শিটে জমা হবে।</p>
-      <input type="text" id="scriptUrlInput" class="form-control" placeholder="https://script.google.com/macros/s/AKfycbz4sUFlz06HF-zbVPQ7kuN7clRqmwrcVyEAqfsUct_Q1oKnNgDspqGjGiTxwy43frTLWA/exec" style="width: 100%; margin-bottom: 15px;">
+      <p style="font-size: 14px; margin-bottom: 15px;">আপনার Google Apps Script Web App URL-টি নিচে পেস্ট করুন। এর ফলে প্রতিটি ইনভয়েস অটোমেটিক আপনার গুগল শিটে জমা হয়ে যাবে।</p>
+      <input type="text" id="scriptUrlInput" class="form-control" placeholder="https://script.google.com/macros/s/.../exec" style="width: 100%; margin-bottom: 15px;">
       <div style="display: flex; gap: 10px; justify-content: flex-end;">
         <button class="btn-nav" style="background: #777;" onclick="closeSheetModal()">বন্ধ করুন</button>
         <button class="btn-nav btn-sheet" onclick="saveSheetUrl()">সেভ করুন</button>
@@ -584,19 +871,19 @@
       return num.toString().replace(/\d/g, d => bnDigits[d]);
     }
 
-    // Set today's date
+    // Set today's date automatically
     document.getElementById('invDate').valueAsDate = new Date();
 
-    // Initialize Page
+    // On Window Load
     window.onload = function() {
-      // Load saved logo if available
+      // Load saved logo
       const savedLogo = localStorage.getItem('pp_custom_logo');
       if (savedLogo) {
         document.getElementById('mainLogo').src = savedLogo;
         document.getElementById('invoiceLogo').src = savedLogo;
       }
       
-      // Load saved Google Sheet URL
+      // Load saved Sheet URL
       const savedSheetUrl = localStorage.getItem('pp_sheet_url');
       if (savedSheetUrl) {
         document.getElementById('scriptUrlInput').value = savedSheetUrl;
@@ -607,7 +894,7 @@
       addNewRow();
     };
 
-    // Add row to table
+    // Add new row to items table
     function addNewRow() {
       const tbody = document.getElementById('tableBody');
       const rowCount = tbody.children.length + 1;
@@ -635,7 +922,7 @@
       calculateInvoice();
     }
 
-    // Handle Custom Subject reveal
+    // Handle Custom Subject input reveal
     function handleSubjectChange(selectElem) {
       const customInput = selectElem.nextElementSibling;
       if (selectElem.value === "অন্যান্য (কাস্টম বিষয়)") {
@@ -652,7 +939,7 @@
       calculateInvoice();
     }
 
-    // Calculate invoice totals
+    // Calculate invoice amounts
     function calculateInvoice() {
       const rows = document.querySelectorAll('#tableBody tr');
       let subTotal = 0;
@@ -691,21 +978,20 @@
       }
     }
 
-    // Modal Control
+    // Modal Controls
     function openSheetModal() { document.getElementById('sheetModal').style.display = 'flex'; }
     function closeSheetModal() { document.getElementById('sheetModal').style.display = 'none'; }
     function saveSheetUrl() {
       const url = document.getElementById('scriptUrlInput').value.trim();
       localStorage.setItem('pp_sheet_url', url);
-      alert('গুগল শিট URL সংরক্ষণ করা হয়েছে!');
+      alert('গুগল শিট URL সফলভাবে সংরক্ষণ করা হয়েছে!');
       closeSheetModal();
     }
 
-    // Process Invoice: Send to Google Sheet & Trigger Print
+    // Process Invoice & Save to Google Sheet
     function processInvoiceAndSave() {
       const sheetUrl = localStorage.getItem('pp_sheet_url');
       
-      // Compile items breakdown text
       let itemsListText = [];
       document.querySelectorAll('#tableBody tr').forEach(row => {
         const sel = row.querySelector('.subject-select').value;
@@ -731,7 +1017,6 @@
         due: document.getElementById('dueAmount').innerText
       };
 
-      // Send to Google Sheet if URL is present
       if (sheetUrl) {
         fetch(sheetUrl, {
           method: 'POST',
@@ -739,11 +1024,11 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         }).then(() => {
-          console.log('Data sent to Google Sheet successfully.');
-        }).catch(err => console.error('Error sending to Sheet:', err));
+          console.log('Google Sheet Sync Completed.');
+        }).catch(err => console.error('Sheet Sync Error:', err));
       }
 
-      // Trigger Print
+      // Open Print Dialog
       window.print();
     }
   </script>
