@@ -1,1036 +1,1091 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PP COMPOSE & PRINTING HUB - আপনার সফল প্রিন্টিং ও কম্পোজ কাজের নির্ভরযোগ্য সঙ্গী</title>
-  
-  <!-- Google Fonts: Hind Siliguri -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <style>
-    :root {
-      --primary-red: #D32F2F;
-      --dark-red: #9A0007;
-      --primary-blue: #0D47A1;
-      --light-bg: #F8F9FA;
-      --card-bg: #FFFFFF;
-      --border-color: #E0E0E0;
-      --text-color: #212121;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Hind Siliguri', sans-serif;
-      scroll-behavior: smooth;
-    }
-
-    body {
-      background-color: var(--light-bg);
-      color: var(--text-color);
-      line-height: 1.6;
-    }
-
-    /* Top Utility Bar */
-    .top-bar {
-      background: var(--primary-blue);
-      color: white;
-      padding: 6px 20px;
-      font-size: 13px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .top-bar div {
-      display: flex;
-      gap: 15px;
-    }
-
-    /* Navigation Bar */
-    .navbar {
-      background-color: #FFFFFF;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      border-bottom: 3px solid var(--primary-red);
-    }
-
-    .nav-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 20px;
-    }
-
-    .brand-logo-container {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      text-decoration: none;
-    }
-
-    .logo-img {
-      max-height: 55px;
-      object-fit: contain;
-    }
-
-    .shop-title h1 {
-      font-size: 22px;
-      color: var(--primary-blue);
-      font-weight: 700;
-      line-height: 1.2;
-    }
-
-    .shop-title p {
-      font-size: 13px;
-      color: var(--primary-red);
-      font-weight: 600;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 20px;
-      align-items: center;
-      list-style: none;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: #333;
-      font-weight: 600;
-      font-size: 15px;
-      transition: color 0.3s;
-    }
-
-    .nav-links a:hover {
-      color: var(--primary-red);
-    }
-
-    .nav-actions {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .btn-nav {
-      background: var(--primary-red);
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 6px;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 13px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.3s;
-    }
-
-    .btn-nav:hover {
-      background: var(--dark-red);
-    }
-
-    .btn-sheet {
-      background: #2E7D32;
-    }
-    .btn-sheet:hover {
-      background: #1B5E20;
-    }
-
-    /* Hero Banner */
-    .hero-banner {
-      background: linear-gradient(135deg, rgba(211, 47, 47, 0.95) 0%, rgba(13, 71, 161, 0.95) 100%),
-                  url('https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?auto=format&fit=crop&w=1200&q=80') center/cover;
-      color: white;
-      padding: 60px 20px;
-      text-align: center;
-    }
-
-    .hero-banner h2 {
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 15px;
-    }
-
-    .hero-banner p.slogan {
-      font-size: 18px;
-      font-weight: 500;
-      margin-bottom: 25px;
-      color: #FFEB3B;
-    }
-
-    .notice-badge {
-      max-width: 850px;
-      margin: 0 auto 25px auto;
-      background: rgba(255,255,255,0.18);
-      padding: 15px 25px;
-      border-radius: 50px;
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.3);
-      font-size: 16px;
-    }
-
-    .hero-btn-group {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-    }
-
-    .btn-hero {
-      padding: 12px 28px;
-      border-radius: 30px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 16px;
-      transition: 0.3s;
-    }
-
-    .btn-hero-primary {
-      background: white;
-      color: var(--primary-red);
-    }
-    .btn-hero-primary:hover {
-      background: #f0f0f0;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-
-    .btn-hero-secondary {
-      background: transparent;
-      color: white;
-      border: 2px solid white;
-    }
-    .btn-hero-secondary:hover {
-      background: white;
-      color: var(--primary-blue);
-    }
-
-    /* Container */
-    .container {
-      max-width: 1150px;
-      margin: 40px auto;
-      padding: 0 15px;
-    }
-
-    /* Section Title */
-    .section-title {
-      text-align: center;
-      margin-bottom: 35px;
-    }
-
-    .section-title h2 {
-      font-size: 28px;
-      color: var(--primary-blue);
-      position: relative;
-      display: inline-block;
-      padding-bottom: 8px;
-    }
-
-    .section-title h2::after {
-      content: '';
-      position: absolute;
-      width: 60px;
-      height: 3.5px;
-      background: var(--primary-red);
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      border-radius: 2px;
-    }
-
-    /* Services Grid */
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 25px;
-    }
-
-    .service-card {
-      background: white;
-      border-radius: 10px;
-      padding: 25px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      border: 1px solid var(--border-color);
-      transition: transform 0.3s, box-shadow 0.3s;
-      border-top: 4px solid var(--primary-red);
-    }
-
-    .service-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-    }
-
-    .service-icon {
-      font-size: 36px;
-      color: var(--primary-red);
-      margin-bottom: 15px;
-    }
-
-    .service-card h3 {
-      font-size: 20px;
-      color: var(--primary-blue);
-      margin-bottom: 10px;
-    }
-
-    .service-card p {
-      font-size: 14px;
-      color: #555;
-    }
-
-    /* Invoice Container */
-    .invoice-card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      padding: 35px;
-      border: 1px solid var(--border-color);
-    }
-
-    /* Invoice Header Printing */
-    .invoice-header {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 2px dashed var(--primary-red);
-      padding-bottom: 20px;
-      margin-bottom: 20px;
-    }
-
-    .invoice-brand {
-      display: flex;
-      gap: 15px;
-      align-items: center;
-    }
-
-    .invoice-brand img {
-      max-height: 75px;
-    }
-
-    .shop-info h2 {
-      color: var(--primary-blue);
-      font-size: 24px;
-    }
-
-    .shop-info p {
-      font-size: 13px;
-      color: #555;
-    }
-
-    .invoice-title-block {
-      text-align: right;
-    }
-
-    .invoice-badge {
-      background: var(--primary-red);
-      color: white;
-      padding: 4px 15px;
-      border-radius: 4px;
-      font-weight: 700;
-      font-size: 18px;
-      display: inline-block;
-      margin-bottom: 8px;
-    }
-
-    /* Customer Details Grid */
-    .customer-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 15px;
-      background: #FFF8F8;
-      padding: 18px;
-      border-radius: 8px;
-      border: 1px solid #FFEBEE;
-      margin-bottom: 25px;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .form-group label {
-      font-size: 13px;
-      font-weight: 600;
-      color: #333;
-      margin-bottom: 4px;
-    }
-
-    .form-control {
-      padding: 8px 12px;
-      border: 1px solid var(--border-color);
-      border-radius: 5px;
-      font-size: 14px;
-      outline: none;
-    }
-
-    .form-control:focus {
-      border-color: var(--primary-red);
-    }
-
-    /* Invoice Table */
-    .table-responsive {
-      overflow-x: auto;
-      margin-bottom: 20px;
-    }
-
-    .invoice-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .invoice-table th, .invoice-table td {
-      border: 1px solid var(--border-color);
-      padding: 10px;
-      text-align: left;
-    }
-
-    .invoice-table th {
-      background-color: var(--primary-red);
-      color: white;
-      font-weight: 600;
-    }
-
-    .custom-subject-input {
-      margin-top: 5px;
-      display: none;
-    }
-
-    .btn-add-row {
-      background: var(--primary-blue);
-      color: white;
-      border: none;
-      padding: 9px 18px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: 600;
-      margin-bottom: 20px;
-    }
-
-    .btn-delete {
-      background: #e53935;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    /* Summary Calculation */
-    .summary-box {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 30px;
-    }
-
-    .summary-table {
-      width: 320px;
-      border-collapse: collapse;
-    }
-
-    .summary-table td {
-      padding: 6px 12px;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .summary-table tr.total-row {
-      font-weight: 700;
-      font-size: 18px;
-      color: var(--primary-red);
-      background-color: #FFEBEE;
-    }
-
-    /* Footer Signatures */
-    .invoice-footer-signatures {
-      margin-top: 50px;
-      display: flex;
-      justify-content: space-between;
-      padding-top: 20px;
-    }
-
-    .sig-line {
-      border-top: 1px solid #888;
-      width: 180px;
-      text-align: center;
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    /* Action Buttons Bar */
-    .actions-bar {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-      margin-top: 25px;
-      background: #eee;
-      padding: 15px;
-      border-radius: 8px;
-    }
-
-    .btn-action {
-      padding: 12px 25px;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: 0.2s;
-    }
-
-    .btn-print {
-      background: var(--primary-red);
-      color: white;
-    }
-
-    .btn-print:hover {
-      background: var(--dark-red);
-    }
-
-    /* Contact Cards */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-
-    .contact-card {
-      background: white;
-      padding: 25px;
-      border-radius: 10px;
-      border-left: 4px solid var(--primary-blue);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    }
-
-    .contact-card i {
-      font-size: 24px;
-      color: var(--primary-blue);
-      margin-bottom: 10px;
-    }
-
-    .contact-card h4 {
-      font-size: 18px;
-      margin-bottom: 5px;
-    }
-
-    /* Footer */
-    footer {
-      background: var(--primary-blue);
-      color: white;
-      text-align: center;
-      padding: 20px;
-      margin-top: 50px;
-      font-size: 14px;
-    }
-
-    /* Modal for Google Sheet Setup */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal-content {
-      background: white;
-      padding: 25px;
-      border-radius: 10px;
-      max-width: 550px;
-      width: 90%;
-    }
-
-    /* PRINT MEDIA QUERY (A4 Size Print) */
-    @media print {
-      body {
-        background: white;
-        color: black;
-      }
-      .top-bar, .navbar, .hero-banner, #services, #contact, footer, .actions-bar, .btn-add-row, .btn-delete, .no-print {
-        display: none !important;
-      }
-      .container {
-        width: 100%;
-        max-width: 100%;
-        margin: 0;
-        padding: 0;
-      }
-      .invoice-card {
-        box-shadow: none;
-        border: none;
-        padding: 0;
-      }
-      .form-control {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-        font-weight: 600;
-      }
-      select.form-control {
-        appearance: none;
-        -webkit-appearance: none;
-      }
-      .custom-subject-input {
-        border: none !important;
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Top Utility Bar -->
-  <div class="top-bar no-print">
-    <div>
-      <span><i class="fa-solid fa-location-dot"></i> বাকলিয়া, চকবাজার, চট্টগ্রাম</span>
-      <span><i class="fa-solid fa-phone"></i> ০১৭৭৯-৯OD৩27</span>
-      <span><i class="fa-solid fa-envelope"></i> prakashpaul011@email.com</span>
-    </div>
-    <div>
-      <span><i class="fa-solid fa-truck-fast"></i> সমগ্র বাংলাদেশে কুরিয়ার ও অনলাইন ডেলিভারি</span>
-    </div>
-  </div>
-
-  <!-- Navigation Bar -->
-  <nav class="navbar no-print">
-    <div class="nav-container">
-      <a href="#home" class="brand-logo-container">
-        <img id="mainLogo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23D32F2F'/><text x='50' y='62' font-size='40' font-weight='bold' fill='white' text-anchor='middle'>PP</text></svg>" alt="PP Logo" class="logo-img">
-        <div class="shop-title">
-          <h1>PP COMPOSE & PRINTING HUB</h1>
-          <p>Quality Print Better Service</p>
-        </div>
-      </a>
-
-      <ul class="nav-links">
-        <li><a href="#home">হোম</a></li>
-        <li><a href="#services">আমাদের সেবাসমূহ</a></li>
-        <li><a href="#invoice">ইনভয়েস মেকার</a></li>
-        <li><a href="#contact">যোগাযোগ</a></li>
-      </ul>
-
-      <div class="nav-actions">
-        <button class="btn-nav btn-sheet" onclick="openSheetModal()">
-          <i class="fa-solid fa-file-excel"></i> গুগল শিট কানেক্ট করুন
-        </button>
-        <label class="btn-nav" style="cursor: pointer;">
-          <i class="fa-solid fa-image"></i> লোগো চেঞ্জ
-          <input type="file" id="logoUploader" accept="image/*" style="display: none;" onchange="uploadLogo(event)">
-        </label>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Hero Section -->
-  <section id="home" class="hero-banner no-print">
-    <h2>PP COMPOSE & PRINTING HUB</h2>
-    <p class="slogan">Quality Print Better Service — আপনার সকল প্রিন্টিং ও কম্পোজ কাজের নির্ভরযোগ্য সঙ্গী</p>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PP COMPOSE & PRINTING HUB | ইনভয়েস ও ফটোপ্রিন্ট মেকার</title>
     
-    <div class="notice-badge">
-      <i class="fa-solid fa-bullhorn" style="color: #FFEB3B; margin-right: 8px;"></i>
-      <strong>সারাদেশে অনলাইন সার্ভিস:</strong> সমগ্র বাংলাদেশের যেকোনো প্রাইমারি, হাই স্কুল, কলেজ ও মাদ্রাসার প্রশ্নপত্র, লেকচার শিট, নোট ও গাইড টাইপিং, প্রিন্ট এবং কুরিয়ার/অনলাইন সার্ভিস দেওয়া হয়।
-    </div>
-
-    <div class="hero-btn-group">
-      <a href="#invoice" class="btn-hero btn-hero-primary"><i class="fa-solid fa-file-invoice"></i> ইনভয়েস তৈরি করুন</a>
-      <a href="#services" class="btn-hero btn-hero-secondary"><i class="fa-solid fa-list-check"></i> সেবাসমূহ দেখুন</a>
-    </div>
-  </section>
-
-  <!-- Services Section -->
-  <section id="services" class="container no-print">
-    <div class="section-title">
-      <h2>আমাদের সেবাসমূহ</h2>
-    </div>
-    <div class="services-grid">
-      <div class="service-card">
-        <i class="fa-solid fa-file-pen service-icon"></i>
-        <h3>প্রশ্নপত্র সেটআপ ও কম্পোজ</h3>
-        <p>প্রাইমারি, হাই স্কুল, কলেজ ও মাদ্রাসার নির্ভুল প্রশ্নপত্র টাইপিং, বাংলা-ইংরেজি ফরম্যাটিং ও সুনির্দিষ্ট প্রিন্টিং প্রস্তুতকরণ।</p>
-      </div>
-      <div class="service-card">
-        <i class="fa-solid fa-book-open service-icon"></i>
-        <h3>লেকচার শিট ও গাইড বই</h3>
-        <p>যেকোনো বিষয়ের সাজানো লেকচার শিট, হ্যান্ডআউট, সাজেশন ও গাইড বুক কম্পিউটার কম্পোজ এবং দ্রুত প্রিন্ট।</p>
-      </div>
-      <div class="service-card">
-        <i class="fa-solid fa-print service-icon"></i>
-        <h3>হাই-স্পিড প্রিন্ট ও ফটোকপি</h3>
-        <p>উন্নত মানের কালার ও ব্ল্যাক অ্যান্ড হোয়াইট ফটোকপি ও প্রিন্টিং সুবিধা, যা দীর্ঘস্থায়ী ও স্পষ্ট।</p>
-      </div>
-      <div class="service-card">
-        <i class="fa-solid fa-layer-group service-icon"></i>
-        <h3>ল্যামিনেশন ও বাঁধাই</h3>
-        <p>যেকোনো সাইজের ফাইল, লেকচার শিট, প্রশ্নপত্র ল্যামিনেশন, স্পাইরাল বাঁধাই ও প্রফেশনাল হার্ড বাঁধাই সেবা।</p>
-      </div>
-      <div class="service-card">
-        <i class="fa-solid fa-laptop-code service-icon"></i>
-        <h3>অনলাইন আবেদন ও কম্পিউটার সেবা</h3>
-        <p>স্কুল-কলেজ ভর্তি, সরকারি/বেসরকারি চাকরি আবেদন, রেজাল্ট শিট প্রসেসিং ও যাবতীয় অনলাইন ফরম পূরণ।</p>
-      </div>
-      <div class="service-card">
-        <i class="fa-solid fa-truck-ramp-box service-icon"></i>
-        <h3>অনলাইন অর্ডার ও কুরিয়ার সার্ভিস</h3>
-        <p>সারাদেশের যেকোনো প্রান্ত থেকে ইমেইল বা হোয়াটসঅ্যাপে ফাইল পাঠিয়ে অর্ডারের মাধ্যমে কুরিয়ারে দ্রুত ডেলিভারি সুবিধা।</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Main Invoice Generator Area -->
-  <section id="invoice" class="container">
-    <div class="section-title no-print">
-      <h2>ইনভয়েস মেকার (Invoice Generator)</h2>
-    </div>
-
-    <div class="invoice-card" id="invoiceArea">
-      
-      <!-- Invoice Printable Header -->
-      <div class="invoice-header">
-        <div class="invoice-brand">
-          <img id="invoiceLogo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23D32F2F'/><text x='50' y='62' font-size='40' font-weight='bold' fill='white' text-anchor='middle'>PP</text></svg>" alt="PP Logo">
-          <div class="shop-info">
-            <h2>PP COMPOSE & PRINTING HUB</h2>
-            <p><i class="fa-solid fa-location-dot"></i> বাকলিয়া, চকবাজার, চট্টগ্রাম (সারাদেশে অনলাইন অর্ডার গ্রহণ করা হয়)</p>
-            <p><i class="fa-solid fa-phone"></i> ০১৭৭৯-৯OD৩27 | <i class="fa-solid fa-envelope"></i> prakashpaul011@email.com</p>
-          </div>
-        </div>
-        <div class="invoice-title-block">
-          <div class="invoice-badge">ক্যাশ মেমো / ইনভয়েস</div>
-          <p style="margin-top: 5px;"><strong>মেমো নং:</strong> <input type="text" id="invNo" class="form-control" style="width: 110px; display: inline-block;" value="PP-1001"></p>
-          <p><strong>তারিখ:</strong> <input type="date" id="invDate" class="form-control" style="width: 140px; display: inline-block;"></p>
-        </div>
-      </div>
-
-      <!-- Customer Details Grid -->
-      <div class="customer-grid">
-        <div class="form-group">
-          <label><i class="fa-solid fa-school"></i> প্রতিষ্ঠান / ক্লায়েন্টের নাম:</label>
-          <input type="text" id="clientName" class="form-control" placeholder="যেমন: চকবাজার সরকারি প্রাথমিক বিদ্যালয়">
-        </div>
-        <div class="form-group">
-          <label><i class="fa-solid fa-map-marker-alt"></i> ঠিকানা (জেলা/উপজেলাসহ):</label>
-          <input type="text" id="clientAddress" class="form-control" placeholder="যেমন: বাকলিয়া, চট্টগ্রাম">
-        </div>
-        <div class="form-group">
-          <label><i class="fa-solid fa-phone"></i> মোবাইল নম্বর:</label>
-          <input type="text" id="clientPhone" class="form-control" placeholder="017XXXXXXXX">
-        </div>
-        <div class="form-group">
-          <label><i class="fa-solid fa-graduation-cap"></i> শ্রেণি সিলেক্ট করুন:</label>
-          <select id="clientClass" class="form-control">
-            <option value="প্রথম শ্রেণি">প্রথম শ্রেণি</option>
-            <option value="দ্বিতীয় শ্রেণি">দ্বিতীয় শ্রেণি</option>
-            <option value="তৃতীয় শ্রেণি">তৃতীয় শ্রেণি</option>
-            <option value="চতুর্থ শ্রেণি">চতুর্থ শ্রেণি</option>
-            <option value="পঞ্চম শ্রেণি">পঞ্চম শ্রেণি</option>
-            <option value="ষষ্ঠ শ্রেণি">ষষ্ঠ শ্রেণি</option>
-            <option value="সপ্তম শ্রেণি">সপ্তম শ্রেণি</option>
-            <option value="অষ্টম শ্রেণি">অষ্টম শ্রেণি</option>
-            <option value="নবম-দশম শ্রেণি">নবম-দশম শ্রেণি</option>
-            <option value="একাদশ-দ্বাদশ শ্রেণি">একাদশ-দ্বাদশ শ্রেণি</option>
-            <option value="মাদ্রাসা/অন্যান্য">মাদ্রাসা / অন্যান্য</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Items Table -->
-      <div class="table-responsive">
-        <table class="invoice-table" id="itemsTable">
-          <thead>
-            <tr>
-              <th style="width: 5%;">#</th>
-              <th style="width: 45%;">বিষয় / কাজের বিবরণ</th>
-              <th style="width: 15%;">সংখ্যা/কপি</th>
-              <th style="width: 15%;">দর (টাকা)</th>
-              <th style="width: 15%;">মোট (টাকা)</th>
-              <th style="width: 5%;" class="no-print">মুছুন</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody">
-            <!-- Dynamic Rows -->
-          </tbody>
-        </table>
-      </div>
-
-      <button class="btn-add-row no-print" onclick="addNewRow()">
-        <i class="fa-solid fa-plus-circle"></i> নতুন বিষয় / কাজ যোগ করুন
-      </button>
-
-      <!-- Summary Section -->
-      <div class="summary-box">
-        <table class="summary-table">
-          <tr>
-            <td>সর্বমোট (Subtotal):</td>
-            <td style="text-align: right;"><span id="subTotal">০.০০</span> ৳</td>
-          </tr>
-          <tr>
-            <td>ছাড় / ডিসকাউন্ট:</td>
-            <td style="text-align: right;"><input type="number" id="discountInput" class="form-control" style="width: 95px; text-align: right;" value="0" oninput="calculateInvoice()"> ৳</td>
-          </tr>
-          <tr class="total-row">
-            <td>নিট বিল:</td>
-            <td style="text-align: right;"><span id="netTotal">০.০০</span> ৳</td>
-          </tr>
-          <tr>
-            <td>জমা / পরিশোধ:</td>
-            <td style="text-align: right;"><input type="number" id="paidInput" class="form-control" style="width: 95px; text-align: right;" value="0" oninput="calculateInvoice()"> ৳</td>
-          </tr>
-          <tr>
-            <td><strong>বকেয়া / অবশিষ্ট:</strong></td>
-            <td style="text-align: right; color: var(--primary-red);"><strong id="dueAmount">০.০০</strong> ৳</td>
-          </tr>
-        </table>
-      </div>
-
-      <!-- Signatures -->
-      <div class="invoice-footer-signatures">
-        <div class="sig-line">গ্রাহকের স্বাক্ষর</div>
-        <div class="sig-line">আদেশক্রমে: PP Compose & Printing Hub</div>
-      </div>
-
-    </div>
-
-    <!-- Action Buttons Bar -->
-    <div class="actions-bar no-print">
-      <button class="btn-action btn-print" onclick="processInvoiceAndSave()">
-        <i class="fa-solid fa-print"></i> প্রিন্ট / PDF সেভ এবং শিটে পাঠান
-      </button>
-    </div>
-  </section>
-
-  <!-- Contact Section -->
-  <section id="contact" class="container no-print">
-    <div class="section-title">
-      <h2>যোগাযোগ ও অর্ডার ডেক্স</h2>
-    </div>
-    <div class="contact-grid">
-      <div class="contact-card">
-        <i class="fa-solid fa-location-dot"></i>
-        <h4>দোকানের ঠিকানা</h4>
-        <p>বাকলিয়া, চকবাজার, চট্টগ্রাম।</p>
-      </div>
-      <div class="contact-card">
-        <i class="fa-solid fa-phone"></i>
-        <h4>মোবাইল ও ওয়াটসঅ্যাপ</h4>
-        <p>01779987327 (সরাসরি কল বা ফাইল পাঠাতে)</p>
-      </div>
-      <div class="contact-card">
-        <i class="fa-solid fa-envelope"></i>
-        <h4>ইমেইল ঠিকানা</h4>
-        <p>prakashpaul011@email.com</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="no-print">
-    <p>&copy; 2026 PP COMPOSE & PRINTING HUB | Quality Print Better Service | সর্বস্বত্ব সংরক্ষিত।</p>
-  </footer>
-
-  <!-- Modal for Google Sheet URL -->
-  <div class="modal" id="sheetModal">
-    <div class="modal-content">
-      <h3 style="color: var(--primary-blue); margin-bottom: 10px;"><i class="fa-solid fa-file-excel"></i> গুগল শিট কানেকশন সেটআপ</h3>
-      <p style="font-size: 14px; margin-bottom: 15px;">আপনার Google Apps Script Web App URL-টি নিচে পেস্ট করুন। এর ফলে প্রতিটি ইনভয়েস অটোমেটিক আপনার গুগল শিটে জমা হয়ে যাবে।</p>
-      <input type="text" id="scriptUrlInput" class="form-control" placeholder="https://script.google.com/macros/s/.../exec" style="width: 100%; margin-bottom: 15px;">
-      <div style="display: flex; gap: 10px; justify-content: flex-end;">
-        <button class="btn-nav" style="background: #777;" onclick="closeSheetModal()">বন্ধ করুন</button>
-        <button class="btn-nav btn-sheet" onclick="saveSheetUrl()">সেভ করুন</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // List of standard subjects
-    const subjectsList = [
-      "বাংলা", "ইংরেজি", "গণিত", "পরিবেশ পরিচিতি", "অঙ্কন / শিল্পকলা",
-      "বাংলাদেশ ও বিশ্বপরিচয়", "প্রাথমিক বিজ্ঞান", "ইসলাম ও নৈতিক শিক্ষা",
-      "হিন্দুধর্ম ও নৈতিক শিক্ষা", "বৌদ্ধধর্ম ও নৈতিক শিক্ষা", "খ্রিস্টধর্ম ও নৈতিক শিক্ষা",
-      "বাংলা ১ম পত্র", "বাংলা ২য় পত্র", "ইংরেজি ১ম পত্র", "ইংরেজি ২য় পত্র",
-      "বিজ্ঞান", "তথ্য ও যোগাযোগ প্রযুক্তি (আইসিটি)", "কৃষি শিক্ষা", "গার্হস্থ্য বিজ্ঞান",
-      "পদার্থবিজ্ঞান", "রসায়ন", "জীববিজ্ঞান", "উচ্চতর গণিত", "ইতিহাস ও বিশ্বসভ্যতা",
-      "ভূগোল ও পরিবেশ", "অর্থনীতি", "পৌরনীতি ও নাগরিকতা", "হিসাববিজ্ঞান",
-      "ব্যবসায় উদ্যোগ", "ফিন্যান্স ও ব্যাংকিং", "অন্যান্য (কাস্টম বিষয়)"
-    ];
-
-    // Convert English numbers to Bengali numerals
-    function toBengaliNumerals(num) {
-      const bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-      return num.toString().replace(/\d/g, d => bnDigits[d]);
-    }
-
-    // Set today's date automatically
-    document.getElementById('invDate').valueAsDate = new Date();
-
-    // On Window Load
-    window.onload = function() {
-      // Load saved logo
-      const savedLogo = localStorage.getItem('pp_custom_logo');
-      if (savedLogo) {
-        document.getElementById('mainLogo').src = savedLogo;
-        document.getElementById('invoiceLogo').src = savedLogo;
-      }
-      
-      // Load saved Sheet URL
-      const savedSheetUrl = localStorage.getItem('pp_sheet_url');
-      if (savedSheetUrl) {
-        document.getElementById('scriptUrlInput').value = savedSheetUrl;
-      }
-
-      // Add default 2 rows
-      addNewRow();
-      addNewRow();
-    };
-
-    // Add new row to items table
-    function addNewRow() {
-      const tbody = document.getElementById('tableBody');
-      const rowCount = tbody.children.length + 1;
-      const tr = document.createElement('tr');
-
-      let subjectOptions = `<option value="">-- বিষয় নির্বাচন করুন --</option>`;
-      subjectsList.forEach(sub => {
-        subjectOptions += `<option value="${sub}">${sub}</option>`;
-      });
-
-      tr.innerHTML = `
-        <td>${toBengaliNumerals(rowCount)}</td>
-        <td>
-          <select class="form-control subject-select" onchange="handleSubjectChange(this)">
-            ${subjectOptions}
-          </select>
-          <input type="text" class="form-control custom-subject-input" placeholder="কাস্টম বিষয়ের নাম লিখুন...">
-        </td>
-        <td><input type="number" class="form-control qty-input" value="1" min="1" oninput="calculateInvoice()"></td>
-        <td><input type="number" class="form-control rate-input" value="0" min="0" oninput="calculateInvoice()"></td>
-        <td class="row-total">০.০০ ৳</td>
-        <td class="no-print"><button class="btn-delete" onclick="removeRow(this)"><i class="fa-solid fa-trash"></i></button></td>
-      `;
-      tbody.appendChild(tr);
-      calculateInvoice();
-    }
-
-    // Handle Custom Subject input reveal
-    function handleSubjectChange(selectElem) {
-      const customInput = selectElem.nextElementSibling;
-      if (selectElem.value === "অন্যান্য (কাস্টম বিষয়)") {
-        customInput.style.display = "block";
-      } else {
-        customInput.style.display = "none";
-      }
-      calculateInvoice();
-    }
-
-    // Remove row
-    function removeRow(btn) {
-      btn.closest('tr').remove();
-      calculateInvoice();
-    }
-
-    // Calculate invoice amounts
-    function calculateInvoice() {
-      const rows = document.querySelectorAll('#tableBody tr');
-      let subTotal = 0;
-
-      rows.forEach((row, idx) => {
-        const qty = parseFloat(row.querySelector('.qty-input').value) || 0;
-        const rate = parseFloat(row.querySelector('.rate-input').value) || 0;
-        const total = qty * rate;
-        subTotal += total;
-
-        row.querySelector('.row-total').innerText = toBengaliNumerals(total.toFixed(2)) + ' ৳';
-      });
-
-      const discount = parseFloat(document.getElementById('discountInput').value) || 0;
-      const netTotal = Math.max(0, subTotal - discount);
-      const paid = parseFloat(document.getElementById('paidInput').value) || 0;
-      const due = Math.max(0, netTotal - paid);
-
-      document.getElementById('subTotal').innerText = toBengaliNumerals(subTotal.toFixed(2));
-      document.getElementById('netTotal').innerText = toBengaliNumerals(netTotal.toFixed(2));
-      document.getElementById('dueAmount').innerText = toBengaliNumerals(due.toFixed(2));
-    }
-
-    // Custom Logo Upload
-    function uploadLogo(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          const imgData = evt.target.result;
-          document.getElementById('mainLogo').src = imgData;
-          document.getElementById('invoiceLogo').src = imgData;
-          localStorage.setItem('pp_custom_logo', imgData);
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-
-    // Modal Controls
-    function openSheetModal() { document.getElementById('sheetModal').style.display = 'flex'; }
-    function closeSheetModal() { document.getElementById('sheetModal').style.display = 'none'; }
-    function saveSheetUrl() {
-      const url = document.getElementById('scriptUrlInput').value.trim();
-      localStorage.setItem('pp_sheet_url', url);
-      alert('গুগল শিট URL সফলভাবে সংরক্ষণ করা হয়েছে!');
-      closeSheetModal();
-    }
-
-    // Process Invoice & Save to Google Sheet
-    function processInvoiceAndSave() {
-      const sheetUrl = localStorage.getItem('pp_sheet_url');
-      
-      let itemsListText = [];
-      document.querySelectorAll('#tableBody tr').forEach(row => {
-        const sel = row.querySelector('.subject-select').value;
-        const cust = row.querySelector('.custom-subject-input').value;
-        const subjectName = (sel === "অন্যান্য (কাস্টম বিষয়)") ? (cust || "অন্যান্য") : sel;
-        const qty = row.querySelector('.qty-input').value;
-        const rate = row.querySelector('.rate-input').value;
-        if (subjectName) {
-          itemsListText.push(`${subjectName} (${qty}টি x ${rate}৳)`);
+    <!-- Google Fonts: Hind Siliguri for Bengali typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            700: '#be123c',
+                            primary: '#D32F2F', // Brand Crimson Red
+                            dark: '#B71C1C',
+                            soft: '#FFEAEA'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Hind Siliguri', 'sans-serif'],
+                    }
+                }
+            }
         }
-      });
+    </script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-      const payload = {
-        invoice_no: document.getElementById('invNo').value,
-        date: document.getElementById('invDate').value,
-        client_name: document.getElementById('clientName').value,
-        client_address: document.getElementById('clientAddress').value,
-        client_phone: document.getElementById('clientPhone').value,
-        client_class: document.getElementById('clientClass').value,
-        items: itemsListText.join(', '),
-        net_total: document.getElementById('netTotal').innerText,
-        paid: document.getElementById('paidInput').value,
-        due: document.getElementById('dueAmount').innerText
-      };
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: #FAFAFA;
+            color: #212121;
+        }
 
-      if (sheetUrl) {
-        fetch(sheetUrl, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }).then(() => {
-          console.log('Google Sheet Sync Completed.');
-        }).catch(err => console.error('Sheet Sync Error:', err));
-      }
+        /* Lipighor exact rounded card style */
+        .lipighor-card {
+            background: #FFFFFF;
+            border: 1px solid #FFE0E0;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px -2px rgba(211, 47, 47, 0.04);
+            transition: all 0.25s ease-in-out;
+        }
+        .lipighor-card:hover {
+            box-shadow: 0 8px 25px -4px rgba(211, 47, 47, 0.1);
+            border-color: #FCA5A5;
+        }
 
-      // Open Print Dialog
-      window.print();
-    }
-  </script>
+        /* Header Navigation Pill Container */
+        .nav-pill-container {
+            background: #FFF0F0;
+            border: 1px solid #FFD8D8;
+            border-radius: 18px;
+        }
+
+        /* Print CSS Rules for Exact A4 Memo Output */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+                font-size: 11pt;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-only-container {
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                box-shadow: none !important;
+                border: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .invoice-preview-card {
+                box-shadow: none !important;
+                border: 1px solid #ccc !important;
+                border-radius: 0 !important;
+                padding: 15px !important;
+            }
+            @page {
+                size: A4;
+                margin: 12mm;
+            }
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- Top Announcement / Sub-banner -->
+    <div class="text-gray-500 text-xs md:text-sm py-1.5 px-4 text-center font-medium no-print bg-white border-b border-red-50">
+        <i class="fa-solid fa-bullhorn text-brand-primary mr-1.5"></i>
+        সমগ্র বাংলাদেশের যেকোনো প্রাইমারি, হাই স্কুল, কলেজ ও মাদ্রাসার প্রশ্নপত্র, লেকচার শিট, নোট ও গাইড টাইপিং, প্রিন্ট এবং কুরিয়ার/অনলাইন সার্ভিস দেওয়া হয়।
+    </div>
+
+    <!-- Main Navigation Bar (Exact Screenshot Layout) -->
+    <header class="bg-white border-b border-red-100 sticky top-0 z-40 shadow-sm no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                
+                <!-- Left Store Branding Area -->
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <!-- Brand Logo Frame -->
+                    <div id="headerLogoContainer" class="w-14 h-14 rounded-2xl border-2 border-red-200 p-1 flex items-center justify-center bg-white shadow-sm overflow-hidden shrink-0">
+                        <img id="headerLogoImg" src="https://placehold.co/100x100/D32F2F/ffffff?text=PP" alt="Shop Logo" class="w-full h-full object-contain rounded-xl">
+                    </div>
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-black text-gray-900 tracking-tight leading-none uppercase">
+                            PP COMPOSE & PRINTING HUB
+                        </h1>
+                        <p class="text-xs font-bold text-amber-600 mt-1 flex items-center">
+                            <i class="fa-solid fa-star text-amber-500 mr-1"></i> Quality Print Better Service
+                        </p>
+                        <p class="text-[11px] text-gray-500 font-medium mt-0.5">
+                            <i class="fa-solid fa-location-dot text-brand-primary mr-1"></i> বাকলিয়া, চকবাজার, চট্টগ্রাম | 
+                            <i class="fa-solid fa-phone text-brand-primary ml-1 mr-0.5"></i> 01779987327
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right Navigation Pills & Action Bar -->
+                <div class="nav-pill-container p-1.5 flex flex-wrap items-center gap-2 self-start lg:self-center">
+                    <!-- Navigation Tabs -->
+                    <button onclick="switchTab('home')" id="nav-home" class="nav-btn px-4 py-2 rounded-xl text-xs md:text-sm font-bold bg-brand-primary text-white shadow transition-all flex items-center">
+                        <i class="fa-solid fa-house mr-1.5"></i> হোম
+                    </button>
+                    <button onclick="switchTab('invoice')" id="nav-invoice" class="nav-btn px-4 py-2 rounded-xl text-xs md:text-sm font-bold text-gray-700 hover:text-brand-primary hover:bg-white transition-all flex items-center">
+                        <i class="fa-solid fa-file-invoice-dollar mr-1.5"></i> ইনভয়েস মেকার
+                    </button>
+                    <button onclick="switchTab('contact')" id="nav-contact" class="nav-btn px-4 py-2 rounded-xl text-xs md:text-sm font-bold text-gray-700 hover:text-brand-primary hover:bg-white transition-all flex items-center">
+                        <i class="fa-solid fa-location-dot mr-1.5"></i> যোগাযোগ
+                    </button>
+
+                    <div class="h-5 w-px bg-red-200 hidden sm:block mx-1"></div>
+
+                    <!-- Custom Logo Upload Action -->
+                    <button onclick="openLogoModal()" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-brand-primary border border-red-200 hover:bg-red-50 transition shadow-sm flex items-center">
+                        <i class="fa-solid fa-image mr-1.5 text-brand-primary"></i> কাস্টম লোগো
+                    </button>
+
+                    <!-- Google Sheet Config Action -->
+                    <button onclick="openSheetModal()" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition shadow-sm flex items-center">
+                        <i class="fa-solid fa-file-excel mr-1.5 text-emerald-600"></i> গুগল শিট
+                    </button>
+
+                    <!-- New Invoice Fast Button -->
+                    <button onclick="switchTab('invoice'); resetInvoiceForm();" class="px-4 py-2 rounded-xl text-xs font-bold bg-brand-primary hover:bg-brand-dark text-white shadow transition flex items-center">
+                        <i class="fa-solid fa-plus-circle mr-1.5"></i> নতুন মেমো
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- Notification Toast Banner -->
+    <div id="toastMessage" class="fixed top-24 right-5 z-50 bg-gray-900 text-white px-5 py-3 rounded-2xl shadow-2xl text-xs font-semibold flex items-center space-x-2 space-x-reverse hidden transition-all">
+        <i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+        <span id="toastText">কার্যক্রম সফল হয়েছে</span>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+        <!-- ==================== SECTION 1: HOME & SERVICES (Lipighor Cards) ==================== -->
+        <section id="tab-home" class="tab-content space-y-8">
+            
+            <div class="text-center max-w-2xl mx-auto space-y-2">
+                <span class="inline-block px-3.5 py-1 bg-red-100 text-brand-primary rounded-full text-xs font-bold tracking-wide border border-red-200">
+                    আস্থা ও দ্রুততার সাথে প্রিন্টিং সেবা
+                </span>
+                <h2 class="text-2xl md:text-4xl font-extrabold text-gray-900">
+                    আমাদের বিশেষায়িত সেবাসমূহ
+                </h2>
+                <p class="text-xs md:text-sm text-gray-500 font-medium">
+                    শ্রেণি ১ থেকে ১২ পর্যন্ত নিখুঁত কম্পোজ ও দ্রুততম সময়ে ফটোকপি সেবা
+                </p>
+            </div>
+
+            <!-- Service Cards Grid (Matching screenshot layout & styling) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+                
+                <!-- Card 1 -->
+                <div class="lipighor-card p-6 flex items-start space-x-4 space-x-reverse">
+                    <div class="w-12 h-12 bg-brand-soft text-brand-primary rounded-2xl flex items-center justify-center text-xl shrink-0 border border-red-100">
+                        <i class="fa-solid fa-file-signature"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="text-base font-bold text-gray-900">প্রশ্নপত্র & মডেল টেস্ট কম্পোজ</h3>
+                        <p class="text-xs text-gray-600 leading-relaxed">
+                            শ্রেণি ১-১২ এর বাংলা, ইংরেজি, গণিত, বিজ্ঞান ও অন্যান্য বিষয়ের নিখুঁত ডিজিটাল টাইপিং ও গোপনীয়তা রক্ষা।
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="lipighor-card p-6 flex items-start space-x-4 space-x-reverse">
+                    <div class="w-12 h-12 bg-brand-soft text-brand-primary rounded-2xl flex items-center justify-center text-xl shrink-0 border border-red-100">
+                        <i class="fa-solid fa-copy"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="text-base font-bold text-gray-900">ডিজিটাল ফটোকপি & বাল্ক প্রিন্ট</h3>
+                        <p class="text-xs text-gray-600 leading-relaxed">
+                            স্কুল-কলেজের বাল্ক পরিমাণের প্রশ্নপত্র ও লেকচার শিটের জন্য পাইকারি মূল্যে দ্রুততম ফটোকপি সার্ভিস।
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="lipighor-card p-6 flex items-start space-x-4 space-x-reverse">
+                    <div class="w-12 h-12 bg-brand-soft text-brand-primary rounded-2xl flex items-center justify-center text-xl shrink-0 border border-red-100">
+                        <i class="fa-solid fa-print"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="text-base font-bold text-gray-900">এইচডি কালার প্রিন্টিং</h3>
+                        <p class="text-xs text-gray-600 leading-relaxed">
+                            প্রজেক্ট কভার পেজ, কালার ডায়াগ্রাম, ছবি ও আইডি কার্ডের জন্য ওয়াটারপ্রুফ কালার প্রিন্টিং।
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="lipighor-card p-6 flex items-start space-x-4 space-x-reverse">
+                    <div class="w-12 h-12 bg-brand-soft text-brand-primary rounded-2xl flex items-center justify-center text-xl shrink-0 border border-red-100">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="text-base font-bold text-gray-900">স্পাইরাল বাইন্ডিং & লেমিনেশন</h3>
+                        <p class="text-xs text-gray-600 leading-relaxed">
+                            গুরুত্বপূর্ণ সার্টিফিকেট, আইডি কার্ড লেমিনেশন এবং বই/শিটের মজবুত স্পাইরাল বাইন্ডিং।
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="lipighor-card p-6 flex items-start space-x-4 space-x-reverse">
+                    <div class="w-12 h-12 bg-brand-soft text-brand-primary rounded-2xl flex items-center justify-center text-xl shrink-0 border border-red-100">
+                        <i class="fa-solid fa-globe"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="text-base font-bold text-gray-900">অনলাইন ফর্ম & এডমিশন</h3>
+                        <p class="text-xs text-gray-600 leading-relaxed">
+                            সরকারি/বেসরকারি চাকরির আবেদন, স্কুলে ভর্তি ফরম পূরণ, বোর্ডের রেজাল্ট দেখা ও অনলাইন আবেদন।
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 6 -->
+                <div class="lipighor-card p-6 flex items-start space-x-4 space-x-reverse">
+                    <div class="w-12 h-12 bg-brand-soft text-brand-primary rounded-2xl flex items-center justify-center text-xl shrink-0 border border-red-100">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="text-base font-bold text-gray-900">স্ক্যানিং & ডিজিটাল ডকুমেন্ট</h3>
+                        <p class="text-xs text-gray-600 leading-relaxed">
+                            ডকুমেন্ট হাই রেজোলিউশনে স্ক্যান করে পিডিএফ ফাইল তৈরি এবং ইমেইল/হোয়াটসঅ্যাপে পাঠানো।
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Quick Action Banner -->
+            <div class="bg-gradient-to-r from-red-600 to-brand-primary text-white rounded-3xl p-8 flex flex-col md:flex-row justify-between items-center gap-6 shadow-xl shadow-red-900/10">
+                <div class="space-y-2 text-center md:text-left">
+                    <h3 class="text-xl md:text-2xl font-black">মেমো / ইনভয়েস তৈরি করতে চান?</h3>
+                    <p class="text-red-100 text-xs md:text-sm">স্কুল, কলেজ বা ব্যক্তিগত অর্ডারের জন্য এখনই ডিজিটাল ক্যাশ মেমো জেনারেট করুন</p>
+                </div>
+                <button onclick="switchTab('invoice')" class="bg-white text-brand-primary font-bold px-6 py-3 rounded-2xl shadow hover:bg-red-50 transition shrink-0 text-sm">
+                    <i class="fa-solid fa-calculator mr-2"></i> ইনভয়েস মেকারে যান
+                </button>
+            </div>
+
+        </section>
+
+        <!-- ==================== SECTION 2: INVOICE GENERATOR ==================== -->
+        <section id="tab-invoice" class="tab-content hidden space-y-6">
+            
+            <!-- Controls Bar -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 no-print border-b border-red-100 pb-4">
+                <div>
+                    <h2 class="text-2xl font-black text-gray-900">ইনভয়েস & ক্যাশ মেমো জেনারেটর</h2>
+                    <p class="text-xs text-gray-500 font-medium">ক্লায়েন্ট তথ্য ও বিষয়ের অর্ডার যুক্ত করে সরাসরি মেমো তৈরি করুন</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="loadSampleData()" class="px-4 py-2 bg-red-50 text-brand-primary border border-red-200 hover:bg-red-100 text-xs font-bold rounded-xl transition">
+                        <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> ডেমো তথ্য
+                    </button>
+                    <button onclick="resetInvoiceForm()" class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 text-xs font-bold rounded-xl transition">
+                        <i class="fa-solid fa-rotate-left mr-1"></i> রিসেট
+                    </button>
+                    <button onclick="printAndSendToSheet()" class="px-5 py-2.5 bg-brand-primary hover:bg-brand-dark text-white text-xs font-bold rounded-xl shadow-md transition flex items-center">
+                        <i class="fa-solid fa-print mr-2"></i> প্রিন্ট / PDF সেভ এবং শিটে পাঠান
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- Left Input Controls Form -->
+                <div class="lg:col-span-5 space-y-6 no-print">
+                    
+                    <!-- Client Meta Box -->
+                    <div class="lipighor-card p-5 space-y-4">
+                        <h3 class="text-xs font-extrabold text-brand-primary uppercase tracking-wider flex items-center border-b border-red-100 pb-2">
+                            <i class="fa-solid fa-user-gear mr-2"></i> গ্রাহক / প্রতিষ্ঠান তথ্য
+                        </h3>
+
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1">প্রতিষ্ঠানের নাম / গ্রাহক <span class="text-red-500">*</span></label>
+                                <input type="text" id="clientName" oninput="updateInvoice()" placeholder="যেমন: বাকলিয়া আইডিয়াল স্কুল" class="w-full text-xs px-3.5 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-primary outline-none">
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 mb-1">মোবাইল নম্বর</label>
+                                    <input type="text" id="clientPhone" oninput="updateInvoice()" placeholder="017XXXXXXXX" class="w-full text-xs px-3.5 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-primary outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 mb-1">মেমো নম্বর</label>
+                                    <input type="text" id="invoiceNumber" oninput="updateInvoice()" value="INV-2026-101" class="w-full text-xs px-3.5 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-primary outline-none bg-red-50/50 font-bold text-brand-primary">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 mb-1">শ্রেণি (সার্বিক/মূল)</label>
+                                    <select id="clientClassSelect" onchange="updateInvoice()" class="w-full text-xs px-3 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-primary outline-none bg-white font-medium">
+                                        <option value="শ্রেণি ৬ - ১০">শ্রেণি ৬ - ১০</option>
+                                        <option value="শ্রেণি ১ - ৫">শ্রেণি ১ - ৫</option>
+                                        <option value="একাদশ - দ্বাদশ">একাদশ - দ্বাদশ</option>
+                                        <option value="ডিগ্রী / অনার্স">ডিগ্রী / অনার্স</option>
+                                        <option value="সার্বিক / অন্যান্য">সার্বিক / অন্যান্য</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 mb-1">তারিখ</label>
+                                    <input type="date" id="invoiceDate" onchange="updateInvoice()" class="w-full text-xs px-3.5 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-primary outline-none">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1">ঠিকানা</label>
+                                <input type="text" id="clientAddress" oninput="updateInvoice()" placeholder="যেমন: চকবাজার, চট্টগ্রাম" class="w-full text-xs px-3.5 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-primary outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Items Entry Input Box -->
+                    <div class="lipighor-card p-5 space-y-4">
+                        <div class="flex justify-between items-center border-b border-red-100 pb-2">
+                            <h3 class="text-xs font-extrabold text-brand-primary uppercase tracking-wider flex items-center">
+                                <i class="fa-solid fa-list-check mr-2"></i> কাজের তালিকা & বিষয়
+                            </h3>
+                            <button onclick="addItemRow()" class="text-xs bg-brand-primary text-white font-bold px-3 py-1.5 rounded-lg hover:bg-brand-dark transition">
+                                <i class="fa-solid fa-plus mr-1"></i> আইটেম যোগ
+                            </button>
+                        </div>
+
+                        <!-- Dynamic Items Rows -->
+                        <div id="itemsFormContainer" class="space-y-3 max-h-[420px] overflow-y-auto pr-1">
+                            <!-- Javascript populates items here -->
+                        </div>
+                    </div>
+
+                    <!-- Payment Adjustment Box -->
+                    <div class="lipighor-card p-5 space-y-3">
+                        <h3 class="text-xs font-extrabold text-brand-primary uppercase tracking-wider flex items-center border-b border-red-100 pb-2">
+                            <i class="fa-solid fa-calculator mr-2"></i> হিসাব ও মূল্য ছাড়
+                        </h3>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1">বিশেষ ছাড় (টাকা)</label>
+                                <input type="number" id="discountAmount" value="0" min="0" oninput="updateInvoice()" class="w-full text-xs px-3 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-brand-primary">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1">জমা/পরিশোধ (টাকা)</label>
+                                <input type="number" id="paidAmount" value="0" min="0" oninput="updateInvoice()" class="w-full text-xs px-3 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-brand-primary">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">বিশেষ দ্রষ্টব্য / নোট (ঐচ্ছিক)</label>
+                            <input type="text" id="invoiceNote" oninput="updateInvoice()" placeholder="যেমন: ডেলিভারি সম্পন্ন হয়েছে" class="w-full text-xs px-3 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-brand-primary">
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Live Printable Receipt Preview -->
+                <div class="lg:col-span-7 print-only-container">
+                    <div id="invoicePrintArea" class="invoice-preview-card bg-white rounded-2xl p-6 md:p-8 border border-red-200 shadow-xl relative min-h-[750px] flex flex-col justify-between">
+                        
+                        <div>
+                            <!-- Receipt Header -->
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b-2 border-brand-primary pb-4 gap-4">
+                                <div class="flex items-center space-x-3 space-x-reverse">
+                                    <div class="w-14 h-14 rounded-2xl border border-red-200 p-1 flex items-center justify-center bg-white shrink-0">
+                                        <img id="invoiceLogoImg" src="https://placehold.co/100x100/D32F2F/ffffff?text=PP" alt="Invoice Logo" class="w-full h-full object-contain rounded-xl">
+                                    </div>
+                                    <div>
+                                        <h2 class="text-xl font-black text-brand-primary tracking-tight">PP COMPOSE & PRINTING HUB</h2>
+                                        <p class="text-xs font-bold text-amber-600">★ Quality Print Better Service</p>
+                                        <p class="text-[11px] text-gray-500 mt-0.5">
+                                            <i class="fa-solid fa-location-dot text-brand-primary mr-0.5"></i> বাকলিয়া, চকবাজার, চট্টগ্রাম | 
+                                            <i class="fa-solid fa-phone text-brand-primary ml-1 mr-0.5"></i> 01779987327
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="text-left sm:text-right bg-red-50 p-2.5 rounded-xl border border-red-100 shrink-0 min-w-[140px]">
+                                    <span class="inline-block bg-brand-primary text-white text-[10px] font-bold px-2 py-0.5 rounded tracking-widest uppercase mb-1">ক্যাশ মেমো</span>
+                                    <p class="text-xs font-bold text-gray-800">নং: <span id="viewInvoiceNo" class="text-brand-primary font-mono text-xs">INV-2026-101</span></p>
+                                    <p class="text-[11px] text-gray-600">তারিখ: <span id="viewInvoiceDate" class="font-medium">--</span></p>
+                                </div>
+                            </div>
+
+                            <!-- Customer Info Summary -->
+                            <div class="my-4 bg-gray-50 p-3.5 rounded-xl border border-gray-200 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                                <div>
+                                    <p class="text-gray-500 font-medium">গ্রাহক / প্রতিষ্ঠান:</p>
+                                    <p id="viewClientName" class="text-xs font-bold text-gray-900">বাকলিয়া আইডিয়াল স্কুল</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 font-medium">মোবাইল নম্বর:</p>
+                                    <p id="viewClientPhone" class="text-xs font-semibold text-gray-800">017XXXXXXXX</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 font-medium">শ্রেণি / ক্যাটাগরি:</p>
+                                    <p id="viewClientClass" class="text-xs font-semibold text-gray-800">শ্রেণি ৬ - ১০</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 font-medium">ঠিকানা:</p>
+                                    <p id="viewClientAddress" class="text-xs font-medium text-gray-700">চকবাজার, চট্টগ্রাম</p>
+                                </div>
+                            </div>
+
+                            <!-- Items Table -->
+                            <div class="overflow-x-auto my-4">
+                                <table class="w-full text-left text-xs border-collapse">
+                                    <thead>
+                                        <tr class="bg-brand-primary text-white">
+                                            <th class="p-2.5 rounded-l-lg text-center w-10">ক্রম</th>
+                                            <th class="p-2.5">বিষয়ের বিবরণ / কাজ</th>
+                                            <th class="p-2.5 text-center w-20">কপি</th>
+                                            <th class="p-2.5 text-right w-24">রেট (টাকা)</th>
+                                            <th class="p-2.5 text-right rounded-r-lg w-28">মোট (টাকা)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="viewTableBody" class="divide-y divide-gray-200 font-medium">
+                                        <!-- Dynamic Table Rows -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Invoice Footer Calculations & Signatures -->
+                        <div class="mt-6 pt-4 border-t border-gray-200">
+                            <div class="flex flex-col sm:flex-row justify-between items-start gap-4">
+                                
+                                <div class="space-y-2 w-full sm:w-1/2">
+                                    <div class="p-3 bg-red-50/60 rounded-xl border border-red-100 text-xs">
+                                        <p class="font-bold text-brand-primary mb-0.5">নোট / মন্তব্য:</p>
+                                        <p id="viewInvoiceNote" class="text-gray-600 italic">কোনো নির্দেশাবলী দেওয়া হয়নি।</p>
+                                    </div>
+                                    <p class="text-[10px] text-gray-500">
+                                        * ভুলত্রুটি সংশোধনযোগ্য। Quality Print Better Service.
+                                    </p>
+                                </div>
+
+                                <!-- Calculation Breakdown -->
+                                <div class="w-full sm:w-5/12 space-y-1.5 text-xs bg-gray-50 p-3 rounded-xl border border-gray-200">
+                                    <div class="flex justify-between text-gray-600">
+                                        <span>উপ-মোট (Subtotal):</span>
+                                        <span id="viewSubtotal" class="font-bold text-gray-800">০.০০ ৳</span>
+                                    </div>
+                                    <div class="flex justify-between text-gray-600">
+                                        <span>বিশেষ ছাড়:</span>
+                                        <span id="viewDiscount" class="font-bold text-red-600">(-) ০.০০ ৳</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs font-extrabold text-brand-primary pt-1.5 border-t border-gray-300">
+                                        <span>সর্বমোট (Net Total):</span>
+                                        <span id="viewGrandTotal">০.০০ ৳</span>
+                                    </div>
+                                    <div class="flex justify-between text-gray-600 pt-1">
+                                        <span>জমা/পরিশোধিত:</span>
+                                        <span id="viewPaid" class="font-semibold text-emerald-600">০.০০ ৳</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs font-bold pt-1 border-t border-gray-200 text-gray-900">
+                                        <span>অবশিষ্ট বকেয়া:</span>
+                                        <span id="viewDue" class="text-red-600 font-extrabold">০.০০ ৳</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Signatures -->
+                            <div class="flex justify-between items-end mt-12 pt-4 text-xs font-semibold text-gray-700">
+                                <div class="text-center">
+                                    <div class="w-28 border-b border-gray-400 mb-1"></div>
+                                    <p>গ্রাহকের স্বাক্ষর</p>
+                                </div>
+                                <div class="text-center">
+                                    <div class="w-36 border-b-2 border-brand-primary mb-1"></div>
+                                    <p class="text-brand-primary font-bold">PP COMPOSE এর পক্ষে</p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== SECTION 3: CONTACT & LOCATION ==================== -->
+        <section id="tab-contact" class="tab-content hidden space-y-8">
+            <div class="text-center max-w-xl mx-auto space-y-2">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900">যোগাযোগ ও আমাদের ঠিকানা</h2>
+                <p class="text-gray-500 text-xs md:text-sm">যেকোনো প্রকার অনলাইন বা প্রিন্টিং অর্ডারের জন্য যোগাযোগ করুন</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                
+                <div class="lipighor-card p-6 text-center space-y-3">
+                    <div class="w-12 h-12 bg-brand-soft text-brand-primary rounded-2xl flex items-center justify-center mx-auto text-xl border border-red-100">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-900 text-sm">দোকানের ঠিকানা</h4>
+                    <p class="text-xs text-gray-600 leading-relaxed">
+                        বাকলিয়া, চকবাজার<br>
+                        চট্টগ্রাম, বাংলাদেশ
+                    </p>
+                </div>
+
+                <div class="lipighor-card p-6 text-center space-y-3">
+                    <div class="w-12 h-12 bg-brand-soft text-brand-primary rounded-2xl flex items-center justify-center mx-auto text-xl border border-red-100">
+                        <i class="fa-solid fa-phone"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-900 text-sm">ফোন & ইমেইল</h4>
+                    <p class="text-xs text-gray-600 leading-relaxed">
+                        মোবাইল: 01779987327<br>
+                        ইমেইল: prakashpaul011@email.com
+                    </p>
+                </div>
+
+                <div class="lipighor-card p-6 text-center space-y-3">
+                    <div class="w-12 h-12 bg-brand-soft text-brand-primary rounded-2xl flex items-center justify-center mx-auto text-xl border border-red-100">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-900 text-sm">কর্মঘণ্টা</h4>
+                    <p class="text-xs text-gray-600 leading-relaxed">
+                        প্রতিদিন: সকাল ৮:০০ - রাত ১০:০০<br>
+                        <span class="text-brand-primary font-bold">(পরীক্ষার মৌসুমে বিশেষ সার্ভিস)</span>
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- CUSTOM LOGO UPLOAD MODAL -->
+    <div id="logoModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 hidden no-print">
+        <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-red-100">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+                <h3 class="text-sm font-bold text-gray-900 flex items-center">
+                    <i class="fa-solid fa-image text-brand-primary mr-2"></i> কাস্টম লোগো আপলোড করুন
+                </h3>
+                <button onclick="closeLogoModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <p class="text-xs text-gray-500 leading-relaxed">
+                আপনার প্রতিষ্ঠানের লোগো (PNG / JPG) নির্বাচন করুন। লোগোটি ব্রাউজারে সংরক্ষিত থাকবে এবং সকল ক্যাশ মেমোতে দেখানো হবে।
+            </p>
+
+            <div class="space-y-3">
+                <input type="file" id="logoFileInput" accept="image/*" class="w-full text-xs text-gray-600 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-red-50 file:text-brand-primary hover:file:bg-red-100">
+                
+                <div class="flex justify-end space-x-2 space-x-reverse pt-2">
+                    <button onclick="resetLogoToDefault()" class="px-3.5 py-2 bg-gray-100 text-gray-700 text-xs font-bold rounded-xl hover:bg-gray-200">
+                        ডিফল্ট লোগো
+                    </button>
+                    <button onclick="saveCustomLogo()" class="px-4 py-2 bg-brand-primary text-white text-xs font-bold rounded-xl hover:bg-brand-dark">
+                        সংরক্ষণ করুন
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GOOGLE SHEET CONFIG MODAL -->
+    <div id="sheetModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 hidden no-print">
+        <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-red-100">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+                <h3 class="text-sm font-bold text-gray-900 flex items-center">
+                    <i class="fa-solid fa-file-excel text-emerald-600 mr-2"></i> গুগল শিট সংযোগ
+                </h3>
+                <button onclick="closeSheetModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <p class="text-xs text-gray-500 leading-relaxed">
+                আপনার Google Apps Script Web App URL প্রবেশ করান। ইনভয়েস প্রিন্ট করার সাথে সাথে মেমোর তথ্যাদি আপনার স্প্রেডশিটে সেভ হবে।
+            </p>
+
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Web App URL</label>
+                    <input type="url" id="googleSheetUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full text-xs px-3.5 py-2.5 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 font-mono">
+                </div>
+
+                <div class="flex justify-end space-x-2 space-x-reverse pt-2">
+                    <button onclick="closeSheetModal()" class="px-3.5 py-2 bg-gray-100 text-gray-700 text-xs font-bold rounded-xl">
+                        বাতিল
+                    </button>
+                    <button onclick="saveGoogleSheetUrl()" class="px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-xl hover:bg-emerald-700">
+                        সেটিং সেভ করুন
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-white mt-12 border-t-4 border-brand-primary no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+                <div>
+                    <h3 class="text-sm font-extrabold text-white">PP COMPOSE & PRINTING HUB</h3>
+                    <p class="text-xs text-gray-400 mt-0.5">ডিজিটাল কম্পিউটার কম্পোজ, প্রশ্নপত্র প্রিন্ট ও ফটোকপি পয়েন্ট</p>
+                </div>
+                <div class="text-xs text-gray-400">
+                    &copy; ২০২৬ PP COMPOSE. সর্বস্বত্ব সংরক্ষিত।
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Default subjects list
+        const subjectOptions = [
+            'বাংলা ১ম পত্র',
+            'বাংলা ২য় পত্র',
+            'ইংরেজি ১ম পত্র',
+            'ইংরেজি ২য় পত্র',
+            'গণিত',
+            'পরিবেশ পরিচিতি',
+            'অঙ্কন / শিল্পকলা',
+            'বাংলাদেশ ও বিশ্বপরিচয়',
+            'প্রাথমিক বিজ্ঞান',
+            'ধর্ম ও নৈতিক শিক্ষা',
+            'পদার্থবিজ্ঞান',
+            'রসায়ন',
+            'জীববিজ্ঞান',
+            'উচ্চতর গণিত',
+            'হিসাববিজ্ঞান',
+            'ব্যবসায় উদ্যোগ',
+            'ফিন্যান্স ও ব্যাংকিং',
+            'আইসিটি / তথ্য ও যোগাযোগ প্রযুক্তি',
+            'লেকচার শিট / নোট',
+            'মডেল টেস্ট / প্রশ্নপত্র',
+            'অন্যান্য (কাস্টম বিষয়)'
+        ];
+
+        // Default State
+        let invoiceData = {
+            clientName: 'বাকলিয়া আইডিয়াল স্কুল',
+            clientPhone: '01779987327',
+            clientClass: 'শ্রেণি ৬ - ১০',
+            clientAddress: 'চকবাজার, চট্টগ্রাম',
+            invoiceNumber: 'INV-2026-101',
+            date: new Date().toISOString().split('T')[0],
+            discount: 50,
+            paid: 500,
+            note: 'বার্ষিক পরীক্ষার প্রশ্নপত্র কম্পোজ ও ফটোকপি সরবরাহ।',
+            items: [
+                { id: 1, subjectSelect: 'বাংলা ১ম পত্র', customSubject: '', qty: 150, rate: 2.0 },
+                { id: 2, subjectSelect: 'গণিত', customSubject: '', qty: 200, rate: 2.0 },
+                { id: 3, subjectSelect: 'ইংরেজি ১ম পত্র', customSubject: '', qty: 100, rate: 2.5 }
+            ]
+        };
+
+        const defaultLogoUrl = 'https://placehold.co/100x100/D32F2F/ffffff?text=PP';
+
+        // Page Load Init
+        window.onload = function() {
+            document.getElementById('invoiceDate').value = invoiceData.date;
+            
+            // Load saved custom logo if exists
+            const savedLogo = localStorage.getItem('customShopLogo');
+            if(savedLogo) {
+                setLogoImages(savedLogo);
+            }
+
+            // Load saved sheet URL if exists
+            const savedSheetUrl = localStorage.getItem('googleSheetUrl');
+            if(savedSheetUrl) {
+                document.getElementById('googleSheetUrlInput').value = savedSheetUrl;
+            }
+
+            renderItemInputs();
+            syncFormWithState();
+            updateInvoice();
+        };
+
+        // Tab Navigation Switcher
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-primary', 'text-white', 'shadow');
+                btn.classList.add('text-gray-700');
+            });
+
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`nav-${tabName}`);
+            if(activeBtn) {
+                activeBtn.classList.add('bg-brand-primary', 'text-white', 'shadow');
+                activeBtn.classList.remove('text-gray-700');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Convert Numbers to Bengali Digits
+        function toBengaliNumeral(num) {
+            const englishDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+            
+            let numStr = typeof num === 'number' ? num.toFixed(2) : String(num);
+            if (numStr.endsWith('.00')) {
+                numStr = numStr.slice(0, -3);
+            }
+            
+            for (let i = 0; i < 10; i++) {
+                numStr = numStr.replaceAll(englishDigits[i], bengaliDigits[i]);
+            }
+            return numStr;
+        }
+
+        // Render Dynamic Input Rows
+        function renderItemInputs() {
+            const container = document.getElementById('itemsFormContainer');
+            container.innerHTML = '';
+
+            invoiceData.items.forEach((item, index) => {
+                const row = document.createElement('div');
+                row.className = 'p-3 bg-red-50/40 border border-red-100 rounded-xl space-y-2 relative';
+
+                let selectOptions = subjectOptions.map(opt => 
+                    `<option value="${opt}" ${opt === item.subjectSelect ? 'selected' : ''}>${opt}</option>`
+                ).join('');
+
+                const isCustom = item.subjectSelect === 'অন্যান্য (কাস্টম বিষয়)';
+
+                row.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold text-brand-primary bg-white px-2 py-0.5 rounded border border-red-200">
+                            আইটেম #${index + 1}
+                        </span>
+                        ${invoiceData.items.length > 1 ? `
+                            <button onclick="removeItemRow(${item.id})" class="text-xs text-red-500 hover:text-red-700 font-bold">
+                                <i class="fa-solid fa-trash-can"></i> মুছে ফেলুন
+                            </button>
+                        ` : ''}
+                    </div>
+
+                    <div class="space-y-2">
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-600 mb-0.5">বিষয়ের বিবরণ / কাজ</label>
+                            <select onchange="updateItemSubjectSelect(${item.id}, this.value)" class="w-full text-xs p-2 border border-gray-300 rounded-lg outline-none bg-white">
+                                ${selectOptions}
+                            </select>
+                        </div>
+
+                        ${isCustom ? `
+                            <div>
+                                <label class="block text-[10px] font-bold text-brand-primary mb-0.5">কাস্টম বিষয়ের নাম লিখুন</label>
+                                <input type="text" value="${item.customSubject}" oninput="updateItemCustomSubject(${item.id}, this.value)" placeholder="যেমন: কম্পিউটার গাইড শিট" class="w-full text-xs p-2 border border-brand-primary rounded-lg outline-none bg-red-50/30">
+                            </div>
+                        ` : ''}
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-600 mb-0.5">কপি/সংখ্যা</label>
+                                <input type="number" min="1" value="${item.qty}" oninput="updateItemField(${item.id}, 'qty', parseFloat(this.value) || 0)" class="w-full text-xs p-2 border border-gray-300 rounded-lg outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-600 mb-0.5">প্রতি কপি দর (টাকা)</label>
+                                <input type="number" step="0.1" value="${item.rate}" oninput="updateItemField(${item.id}, 'rate', parseFloat(this.value) || 0)" class="w-full text-xs p-2 border border-gray-300 rounded-lg outline-none">
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function addItemRow() {
+            invoiceData.items.push({
+                id: Date.now(),
+                subjectSelect: 'বাংলা ১ম পত্র',
+                customSubject: '',
+                qty: 100,
+                rate: 2.0
+            });
+            renderItemInputs();
+            updateInvoice();
+        }
+
+        function removeItemRow(id) {
+            if (invoiceData.items.length <= 1) return;
+            invoiceData.items = invoiceData.items.filter(i => i.id !== id);
+            renderItemInputs();
+            updateInvoice();
+        }
+
+        function updateItemSubjectSelect(id, value) {
+            const item = invoiceData.items.find(i => i.id === id);
+            if(item) {
+                item.subjectSelect = value;
+                renderItemInputs();
+                updateInvoice();
+            }
+        }
+
+        function updateItemCustomSubject(id, value) {
+            const item = invoiceData.items.find(i => i.id === id);
+            if(item) {
+                item.customSubject = value;
+                updateInvoice();
+            }
+        }
+
+        function updateItemField(id, field, value) {
+            const item = invoiceData.items.find(i => i.id === id);
+            if(item) {
+                item[field] = value;
+                updateInvoice();
+            }
+        }
+
+        function syncFormWithState() {
+            document.getElementById('clientName').value = invoiceData.clientName;
+            document.getElementById('clientPhone').value = invoiceData.clientPhone;
+            document.getElementById('clientClassSelect').value = invoiceData.clientClass;
+            document.getElementById('clientAddress').value = invoiceData.clientAddress;
+            document.getElementById('invoiceNumber').value = invoiceData.invoiceNumber;
+            document.getElementById('discountAmount').value = invoiceData.discount;
+            document.getElementById('paidAmount').value = invoiceData.paid;
+            document.getElementById('invoiceNote').value = invoiceData.note;
+        }
+
+        // Live calculation & preview render
+        function updateInvoice() {
+            invoiceData.clientName = document.getElementById('clientName').value || 'নামহীন গ্রাহক';
+            invoiceData.clientPhone = document.getElementById('clientPhone').value || 'প্রযোজ্য নয়';
+            invoiceData.clientClass = document.getElementById('clientClassSelect').value;
+            invoiceData.clientAddress = document.getElementById('clientAddress').value || 'প্রযোজ্য নয়';
+            invoiceData.invoiceNumber = document.getElementById('invoiceNumber').value || 'INV-000';
+            invoiceData.date = document.getElementById('invoiceDate').value;
+            invoiceData.discount = parseFloat(document.getElementById('discountAmount').value) || 0;
+            invoiceData.paid = parseFloat(document.getElementById('paidAmount').value) || 0;
+            invoiceData.note = document.getElementById('invoiceNote').value;
+
+            document.getElementById('viewInvoiceNo').innerText = invoiceData.invoiceNumber;
+            document.getElementById('viewInvoiceDate').innerText = formatDateBengali(invoiceData.date);
+            document.getElementById('viewClientName').innerText = invoiceData.clientName;
+            document.getElementById('viewClientPhone').innerText = toBengaliNumeral(invoiceData.clientPhone);
+            document.getElementById('viewClientClass').innerText = invoiceData.clientClass;
+            document.getElementById('viewClientAddress').innerText = invoiceData.clientAddress;
+            document.getElementById('viewInvoiceNote').innerText = invoiceData.note ? invoiceData.note : 'কোনো বিশেষ নির্দেশাবলী দেওয়া হয়নি।';
+
+            const tableBody = document.getElementById('viewTableBody');
+            tableBody.innerHTML = '';
+
+            let subtotal = 0;
+
+            invoiceData.items.forEach((item, idx) => {
+                const title = item.subjectSelect === 'অন্যান্য (কাস্টম বিষয়)' 
+                    ? (item.customSubject || 'অন্যান্য কাজ') 
+                    : item.subjectSelect;
+
+                const total = item.qty * item.rate;
+                subtotal += total;
+
+                const tr = document.createElement('tr');
+                tr.className = idx % 2 === 0 ? 'bg-white' : 'bg-red-50/20';
+                tr.innerHTML = `
+                    <td class="p-2.5 text-center font-bold text-gray-500">${toBengaliNumeral(idx + 1)}</td>
+                    <td class="p-2.5 font-bold text-gray-900">${title}</td>
+                    <td class="p-2.5 text-center font-semibold text-gray-800">${toBengaliNumeral(item.qty)}</td>
+                    <td class="p-2.5 text-right font-medium text-gray-800">${toBengaliNumeral(item.rate)} ৳</td>
+                    <td class="p-2.5 text-right font-bold text-brand-primary">${toBengaliNumeral(total)} ৳</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+
+            const grandTotal = Math.max(0, subtotal - invoiceData.discount);
+            const due = Math.max(0, grandTotal - invoiceData.paid);
+
+            document.getElementById('viewSubtotal').innerText = toBengaliNumeral(subtotal) + ' ৳';
+            document.getElementById('viewDiscount').innerText = '(-) ' + toBengaliNumeral(invoiceData.discount) + ' ৳';
+            document.getElementById('viewGrandTotal').innerText = toBengaliNumeral(grandTotal) + ' ৳';
+            document.getElementById('viewPaid').innerText = toBengaliNumeral(invoiceData.paid) + ' ৳';
+            document.getElementById('viewDue').innerText = toBengaliNumeral(due) + ' ৳';
+        }
+
+        function formatDateBengali(dateString) {
+            if (!dateString) return 'প্রযোজ্য নয়';
+            const parts = dateString.split('-');
+            if (parts.length !== 3) return dateString;
+            return `${toBengaliNumeral(parts[2])}/${toBengaliNumeral(parts[1])}/${toBengaliNumeral(parts[0])}`;
+        }
+
+        function loadSampleData() {
+            invoiceData = {
+                clientName: 'বাকলিয়া মডেল হাই স্কুল',
+                clientPhone: '01779987327',
+                clientClass: 'শ্রেণি ৬ - ১০',
+                clientAddress: 'বাকলিয়া, চট্টগ্রাম',
+                invoiceNumber: 'INV-2026-88',
+                date: new Date().toISOString().split('T')[0],
+                discount: 100,
+                paid: 1000,
+                note: 'অর্ধবার্ষিক পরীক্ষার প্রশ্নপত্র কম্পোজ ও বাল্ক ফটোকপি।',
+                items: [
+                    { id: 101, subjectSelect: 'পদার্থবিজ্ঞান', customSubject: '', qty: 250, rate: 2.0 },
+                    { id: 102, subjectSelect: 'উচ্চতর গণিত', customSubject: '', qty: 180, rate: 2.5 },
+                    { id: 103, subjectSelect: 'অন্যান্য (কাস্টম বিষয়)', customSubject: 'মডেল টেস্ট প্র্যাকটিস শিট', qty: 120, rate: 3.0 }
+                ]
+            };
+            document.getElementById('invoiceDate').value = invoiceData.date;
+            syncFormWithState();
+            renderItemInputs();
+            updateInvoice();
+            showToast('ডেমো তথ্য সফলভাবে লোড করা হয়েছে!');
+        }
+
+        function resetInvoiceForm() {
+            invoiceData = {
+                clientName: '',
+                clientPhone: '',
+                clientClass: 'শ্রেণি ৬ - ১০',
+                clientAddress: '',
+                invoiceNumber: 'INV-' + Math.floor(1000 + Math.random() * 9000),
+                date: new Date().toISOString().split('T')[0],
+                discount: 0,
+                paid: 0,
+                note: '',
+                items: [
+                    { id: Date.now(), subjectSelect: 'বাংলা ১ম পত্র', customSubject: '', qty: 1, rate: 2.0 }
+                ]
+            };
+            document.getElementById('invoiceDate').value = invoiceData.date;
+            syncFormWithState();
+            renderItemInputs();
+            updateInvoice();
+            showToast('ফরম রিসেট করা হয়েছে!');
+        }
+
+        // Custom Logo Upload Logic
+        function openLogoModal() {
+            document.getElementById('logoModal').classList.remove('hidden');
+        }
+        function closeLogoModal() {
+            document.getElementById('logoModal').classList.add('hidden');
+        }
+
+        function setLogoImages(srcUrl) {
+            document.getElementById('headerLogoImg').src = srcUrl;
+            document.getElementById('invoiceLogoImg').src = srcUrl;
+        }
+
+        function saveCustomLogo() {
+            const fileInput = document.getElementById('logoFileInput');
+            if(fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const dataUrl = e.target.result;
+                    localStorage.setItem('customShopLogo', dataUrl);
+                    setLogoImages(dataUrl);
+                    closeLogoModal();
+                    showToast('কাস্টম লোগো সফলভাবে আপলোড হয়েছে!');
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                closeLogoModal();
+            }
+        }
+
+        function resetLogoToDefault() {
+            localStorage.removeItem('customShopLogo');
+            setLogoImages(defaultLogoUrl);
+            closeLogoModal();
+            showToast('ডিফল্ট লোগো রিসেট করা হয়েছে!');
+        }
+
+        // Google Sheet Config Logic
+        function openSheetModal() {
+            document.getElementById('sheetModal').classList.remove('hidden');
+        }
+        function closeSheetModal() {
+            document.getElementById('sheetModal').classList.add('hidden');
+        }
+
+        function saveGoogleSheetUrl() {
+            const url = document.getElementById('googleSheetUrlInput').value.trim();
+            localStorage.setItem('googleSheetUrl', url);
+            closeSheetModal();
+            showToast('গুগল শিট URL সংরক্ষণ করা হয়েছে!');
+        }
+
+        // Print & Google Sheet Integration Trigger
+        function printAndSendToSheet() {
+            switchTab('invoice');
+            
+            const sheetUrl = localStorage.getItem('googleSheetUrl');
+            if(sheetUrl) {
+                // Prepare order payload
+                const payload = {
+                    invoiceNo: invoiceData.invoiceNumber,
+                    date: invoiceData.date,
+                    clientName: invoiceData.clientName,
+                    phone: invoiceData.clientPhone,
+                    category: invoiceData.clientClass,
+                    address: invoiceData.clientAddress,
+                    items: invoiceData.items.map(i => ({
+                        subject: i.subjectSelect === 'অন্যান্য (কাস্টম বিষয়)' ? i.customSubject : i.subjectSelect,
+                        qty: i.qty,
+                        rate: i.rate,
+                        total: i.qty * i.rate
+                    })),
+                    discount: invoiceData.discount,
+                    paid: invoiceData.paid,
+                    note: invoiceData.note
+                };
+
+                // Send payload asynchronously
+                try {
+                    fetch(sheetUrl, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    }).catch(err => console.log('Sheet sync status:', err));
+                    showToast('মেমো ডাটা গুগল শিটে পাঠানো হয়েছে!');
+                } catch(e) {
+                    console.log(e);
+                }
+            }
+
+            setTimeout(() => {
+                window.print();
+            }, 250);
+        }
+
+        // Toast Helper
+        function showToast(message) {
+            const toast = document.getElementById('toastMessage');
+            document.getElementById('toastText').innerText = message;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+    </script>
 </body>
 </html>
