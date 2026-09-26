@@ -172,7 +172,7 @@
             height: 100%;
             width: 0%;
             background: #10b981;
-            transition: width 0.2s;
+            transition: width 0.3s;
         }
     </style>
 </head>
@@ -275,17 +275,17 @@
     <!-- PROGRESS MODAL -->
     <div id="progress-modal" class="modal-overlay">
         <div class="modal-card">
-            <p style="font-size: 13px; font-weight: bold; color: #1e293b;">অনলাইন গুগল শিটে দ্রুত ডেটা পাঠানো হচ্ছে...</p>
+            <p style="font-size: 13px; font-weight: bold; color: #1e293b;" id="progress-title">গুগল শিটে দ্রুত ডেটা পাঠানো হচ্ছে...</p>
             <div class="progress-bar">
                 <div id="progress-fill" class="progress-fill"></div>
             </div>
-            <p id="progress-text" style="font-size: 12px; color: #64748b;">০% সম্পন্ন (০ / ০)</p>
+            <p id="progress-text" style="font-size: 12px; color: #64748b;">প্রসেস করা হচ্ছে...</p>
         </div>
     </div>
 </div>
 
 <script>
-    // --- Local Storage Initialization (Simulating SQLite Cache) ---
+    // --- Local Storage Initialization ---
     function initDatabase() {
         if (!localStorage.getItem("school_settings")) {
             localStorage.setItem("school_settings", JSON.stringify({ school_name: "আমার বিদ্যালয়" }));
@@ -320,6 +320,8 @@
     initDatabase();
 
     let loggedInTeacher = { name: "", username: "", id: "", designation: "" };
+    
+    // আপনার তৈরি করা গুগল অ্যাপস স্ক্রিপ্টের Web App URL
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxDwLwPVv6i-6JvSe7ueJEWdKkURm6zg7gQCGuYmxPdaJ6KGHVcbXdRqc4fIXbXhwiZYA/exec";
 
     // --- Screen Navigation ---
@@ -367,14 +369,19 @@
     function loadTeacherAssignments() {
         const assignments = JSON.parse(localStorage.getItem("teacher_assignments") || "[]");
         
-        const exams = [...new Set(assignments.map(a => a.exam_type))];
-        const subjects = [...new Set(assignments.map(a => `ক্লাস: ${a.class_name} | বিষয়: ${a.subject_name} — কোড: ${a.subject_code}`))];
+        // ফিল্টার: অ্যাডমিন হলে সব দেখাবে, অন্যথায় শুধু শিক্ষকের নিজস্ব অ্যাসাইনমেন্ট
+        const filteredAssignments = (loggedInTeacher.id === "0" || !loggedInTeacher.id) 
+            ? assignments 
+            : assignments.filter(a => String(a.teacher_id) === String(loggedInTeacher.id));
+
+        const exams = [...new Set(filteredAssignments.map(a => a.exam_type))];
+        const subjects = [...new Set(filteredAssignments.map(a => `ক্লাস: ${a.class_name} | বিষয়: ${a.subject_name} — কোড: ${a.subject_code}`))];
 
         const examSelect = document.getElementById("exam-select");
         examSelect.innerHTML = (exams.length ? exams : ["বার্ষিক পরীক্ষা"]).map(e => `<option value="${e}">${e}</option>`).join("");
 
         const subSelect = document.getElementById("subject-select");
-        subSelect.innerHTML = (subjects.length ? subjects : ["বরাদ্দকৃত কোনো বিষয় পাওয়া যায়নি"]).map(s => `<option value="${s}">${s}</option>`).join("");
+        subSelect.innerHTML = (subjects.length ? subjects : ["বরাদ্দকৃত কোনো বিষয় পাওয়া যায়নি"]).map(s => `<option value="${s}">${s}</option>`).join("");
 
         updateSections();
     }
@@ -564,7 +571,7 @@
     }
 
     function deleteMarksAction() {
-        if (confirm("আপনি কি এই বিষয়ের সমস্ত নম্বর মুছে ফেলতে চান?")) {
+        if (confirm("আপনি কি এই বিষয়ের সমস্ত নম্বর মুছে ফেলতে চান?")) {
             const { exam, section, targetClass, cleanSubject } = currentEntryConfig;
             let marksStore = JSON.parse(localStorage.getItem("marks_store") || "[]");
 
@@ -576,7 +583,7 @@
         }
     }
 
-    // --- Cloud Sync ---
+    // --- Fast Batch Cloud Sync ---
     async function syncDashboardDataToCloud() {
         const exam = document.getElementById("exam-select").value;
         if (!exam) {
@@ -597,14 +604,14 @@
         const modal = document.getElementById("progress-modal");
         const pFill = document.getElementById("progress-fill");
         const pText = document.getElementById("progress-text");
+        
         modal.style.display = "flex";
+        pFill.style.width = "30%";
+        pText.innerText = "ডেটা প্রস্তুত করা হচ্ছে...";
 
-        let successCount = 0;
-        const total = marksStore.length;
-
-        for (let i = 0; i < total; i++) {
-            const m = marksStore[i];
-            const st = students.find(s => s.roll == m.roll && s.class_name == m.class_name && s.section == m.section) || {};
+        // ব্যাচ পে-লোড তৈরি
+        const payloadBatch = marksStore.map(m => {
+            const st = students.find(s => String(s.roll) === String(m.roll) && String(s.class_name) === String(m.class_name) && String(s.section) === String(m.section)) || {};
 
             let written = 0, mcq = 0, prac = 0, totalMarks = 0;
             if (m.obtained_marks === "ABSENT") {
@@ -619,7 +626,7 @@
                 totalMarks = parseFloat(m.obtained_marks) || 0;
             }
 
-            const payload = {
+            return {
                 id: `${m.class_name}_${m.section}_${m.roll}_${m.exam_type}_${m.subject_name}`,
                 exam_name: m.exam_type,
                 class_name: m.class_name,
@@ -630,28 +637,37 @@
                 student_id: "",
                 roll: m.roll,
                 name: st.name || "",
-                written, mcq, practical: prac, total: totalMarks
+                written: written,
+                mcq: mcq,
+                practical: prac,
+                total: totalMarks
             };
+        });
 
-            try {
-                await fetch(WEB_APP_URL, {
-                    method: "POST",
-                    mode: "no-cors",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
-                });
-                successCount++;
-            } catch (err) {
-                console.error("Sync error:", err);
-            }
+        pFill.style.width = "70%";
+        pText.innerText = "গুগল শিটে সার্ভারে পাঠানো হচ্ছে...";
 
-            const percent = Math.round(((i + 1) / total) * 100);
-            pFill.style.width = `${percent}%`;
-            pText.innerText = `${percent}% সম্পন্ন (${i + 1} / ${total})`;
+        try {
+            await fetch(WEB_APP_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "text/plain" },
+                body: JSON.stringify(payloadBatch)
+            });
+
+            pFill.style.width = "100%";
+            pText.innerText = "১০০% সম্পন্ন!";
+
+            setTimeout(() => {
+                modal.style.display = "none";
+                alert(`সফলভাবে মোট ${payloadBatch.length} টি ফলাফল অনলাইন গুগল শিটে আপডেট করা হয়েছে!`);
+            }, 500);
+
+        } catch (err) {
+            console.error("Sync error:", err);
+            modal.style.display = "none";
+            alert("গুগল শিটে ডেটা পাঠাতে সমস্যা হয়েছে। ইন্টারনেট কানেকশন যাচাই করুন!");
         }
-
-        modal.style.display = "none";
-        alert(`মোট ${total} জনের মধ্যে সফলভাবে ${successCount} টি ফলাফল অনলাইন গুগল শিটে জমা হয়েছে!`);
     }
 </script>
 
