@@ -1,0 +1,955 @@
+import sqlite3
+import tkinter as tk
+from tkinter import messagebox, ttk
+from google.oauth2.service_account import Credentials
+import gspread
+import requests
+import json
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+class SchoolMobileApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("স্কুল শিক্ষক প্যানেল - মোবাইল সংস্করণ")
+        self.root.geometry("380x680")
+        self.root.configure(bg="#F8FAFC")
+        self.root.resizable(False, False)
+
+        self.center_window()
+        self.logged_in_teacher = {"name": "", "username": "", "id": "", "designation": ""}
+        
+        self.init_local_database()
+        self.sync_cloud_data_to_local()
+
+        self.school_name = self.fetch_school_name_from_local_or_cloud()
+        self.create_login_screen()
+
+    def center_window(self):
+        self.root.update_idletasks()
+        width = 380
+        height = 680
+        x = (self.root.winfo_screenwidth() // 2) - (width // 2)
+        y = (self.root.winfo_screenheight() // 2) - (height // 2)
+        self.root.geometry(f'{width}x{height}+{x}+{y}')
+
+    def clear_screen(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+    def get_cloud_worksheet(self, sheet_name):
+        SCOPES = [
+            "https://www.googleapis.com/auth/spreadsheets",
+            "https://www.googleapis.com/auth/drive"
+        ]
+        creds = Credentials.from_service_account_file("credentials.json", scopes=SCOPES)
+        client = gspread.authorize(creds)
+        spreadsheet = client.open("School_Result_Master_Template")
+        return spreadsheet.worksheet(sheet_name)
+
+    def init_local_database(self):
+        self.conn = sqlite3.connect("school_local_cache.db")
+        self.cursor = self.conn.cursor()
+        
+        self.cursor.execute("CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)")
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS teachers (
+                username TEXT PRIMARY KEY,
+                password TEXT,
+                name TEXT,
+                teacher_id TEXT,
+                designation TEXT
+            )
+        """)
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS teacher_assignments (
+                teacher_id TEXT,
+                exam_type TEXT,
+                class_name TEXT,
+                subject_name TEXT,
+                subject_code TEXT,
+                section_name TEXT
+            )
+        """)
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS students (
+                roll TEXT,
+                name TEXT,
+                section TEXT,
+                class_name TEXT,
+                religion TEXT,
+                department TEXT,
+                PRIMARY KEY (roll, section, class_name)
+            )
+        """)
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS marks_store (
+                roll TEXT,
+                exam_type TEXT,
+                subject_name TEXT,
+                section TEXT,
+                class_name TEXT,
+                obtained_marks TEXT,
+                PRIMARY KEY (roll, exam_type, subject_name, section, class_name)
+            )
+        """)
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS class_sections (
+                class_name TEXT,
+                section_name TEXT
+            )
+        """)
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS subject_marks_config (
+                class_name TEXT,
+                subject_code TEXT,
+                written_marks INTEGER,
+                mcq_marks INTEGER,
+                practical_marks INTEGER,
+                PRIMARY KEY (class_name, subject_code)
+            )
+        """)
+        self.conn.commit()
+
+    def sync_cloud_data_to_local(self):
+        try:
+            s_sheet = self.get_cloud_worksheet("settings")
+            s_data = s_sheet.get_all_records()
+            if s_data:
+                school_n = s_data[0].get("school_name", "আমার বিদ্যালয়")
+                self.cursor.execute("REPLACE INTO settings (key, value) VALUES (?, ?)", ("school_name", school_n))
+
+            t_sheet = self.get_cloud_worksheet("teachers")
+            t_data = t_sheet.get_all_records()
+            for t in t_data:
+                u_name = str(t.get("username") or "").strip()
+                if u_name:
+                    t_id_val = str(t.get("index_no") or t.get("id") or "").strip()
+                    desig = str(t.get("designation") or "").strip()
+                    self.cursor.execute("""
+                        REPLACE INTO teachers (username, password, name, teacher_id, designation) 
+                        VALUES (?, ?, ?, ?, ?)
+                    """, (u_name, str(t.get("password") or "").strip(), str(t.get("name") or "").strip(), t_id_val, desig))
+
+            ta_sheet = self.get_cloud_worksheet("teacher_assignments")
+            ta_data = ta_sheet.get_all_records()
+            self.cursor.execute("DELETE FROM teacher_assignments")
+            for row in ta_data:
+                t_id = str(row.get("teacher_id") or "").strip()
+                if t_id:
+                    self.cursor.execute("""
+                        INSERT INTO teacher_assignments (teacher_id, exam_type, class_name, subject_name, subject_code, section_name)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                    """, (
+                        t_id,
+                        str(row.get("exam_type") or "বার্ষিক পরীক্ষা").strip(),
+                        str(row.get("class_name") or "").strip(),
+                        str(row.get("subject_name") or "").strip(),
+                        str(row.get("subject_code") or "").strip(),
+                        str(row.get("section_name") or "A").strip()
+                    ))
+
+            st_sheet = self.get_cloud_worksheet("students")
+            st_data = st_sheet.get_all_records()
+            for s in st_data:
+                r_val = str(s.get("roll") or s.get("roll_no") or "").strip()
+                if r_val:
+                    self.cursor.execute("""
+                        REPLACE INTO students (roll, name, section, class_name, religion, department)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                    """, (
+                        r_val,
+                        str(s.get("name") or s.get("student_name") or "").strip(),
+                        str(s.get("section") or "A").strip(),
+                        str(s.get("school_class") or s.get("class_name") or "").strip(),
+                        str(s.get("religion") or "").strip(),
+                        str(s.get("department") or "").strip()
+                    ))
+
+            try:
+                cs_sheet = self.get_cloud_worksheet("class_sections")
+                cs_data = cs_sheet.get_all_records()
+                self.cursor.execute("DELETE FROM class_sections")
+                for cs in cs_data:
+                    c_name = str(cs.get("class_name") or "").strip()
+                    s_name = str(cs.get("section_name") or "").strip()
+                    if c_name and s_name:
+                        self.cursor.execute("INSERT INTO class_sections (class_name, section_name) VALUES (?, ?)", (c_name, s_name))
+            except Exception as e:
+                print(f"Class sections sync error: {e}")
+
+            try:
+                smc_sheet = self.get_cloud_worksheet("subject_marks_config")
+                smc_data = smc_sheet.get_all_records()
+                self.cursor.execute("DELETE FROM subject_marks_config")
+                for row in smc_data:
+                    c_name = str(row.get("class_name") or "").strip()
+                    s_code = str(row.get("subject_code") or "").strip()
+                    if c_name and s_code:
+                        self.cursor.execute("""
+                            INSERT OR REPLACE INTO subject_marks_config 
+                            (class_name, subject_code, written_marks, mcq_marks, practical_marks)
+                            VALUES (?, ?, ?, ?, ?)
+                        """, (
+                            c_name,
+                            s_code,
+                            int(row.get("written_marks") or 0),
+                            int(row.get("mcq_marks") or 0),
+                            int(row.get("practical_marks") or 0)
+                        ))
+            except Exception as e:
+                print(f"Subject marks config sync error: {e}")
+
+            self.conn.commit()
+        except Exception as e:
+            print(f"Cloud Sync Warning (Using Local Cache): {e}")
+
+    def fetch_school_name_from_local_or_cloud(self):
+        self.cursor.execute("SELECT value FROM settings WHERE key='school_name'")
+        res = self.cursor.fetchone()
+        return res[0] if res else "আমার বিদ্যালয়"
+
+    def create_login_screen(self):
+        self.clear_screen()
+
+        main_frame = tk.Frame(self.root, bg="white", bd=0, highlightbackground="#E2E8F0", highlightthickness=1)
+        main_frame.place(relx=0.5, rely=0.5, anchor="center", width=330, height=440)
+
+        tk.Label(main_frame, text=self.school_name, font=("Kalpurush", 15, "bold"), fg="#1E293B", bg="white", wraplength=280, justify="center").pack(pady=(30, 5))
+        tk.Label(main_frame, text="স্কুল শিক্ষক প্যানেল", font=("Kalpurush", 12, "bold"), fg="#475569", bg="white").pack()
+        tk.Label(main_frame, text="আপনার অ্যাকাউন্টে লগইন করুন", font=("Kalpurush", 9), fg="#64748B", bg="white").pack(pady=(0, 20))
+
+        tk.Label(main_frame, text="ইউজারনেম", font=("Kalpurush", 10, "bold"), fg="#334155", bg="white", anchor="w").pack(fill="x", padx=30)
+        self.user_entry = tk.Entry(main_frame, font=("Arial", 11), bg="#F8FAFC", bd=0, highlightbackground="#CBD5E1", highlightthickness=1)
+        self.user_entry.pack(fill="x", padx=30, pady=(5, 15), ipady=6)
+
+        tk.Label(main_frame, text="পাসওয়ার্ড", font=("Kalpurush", 10, "bold"), fg="#334155", bg="white", anchor="w").pack(fill="x", padx=30)
+        self.pass_entry = tk.Entry(main_frame, font=("Arial", 11), show="*", bg="#F8FAFC", bd=0, highlightbackground="#CBD5E1", highlightthickness=1)
+        self.pass_entry.pack(fill="x", padx=30, pady=(5, 25), ipady=6)
+
+        login_btn = tk.Button(main_frame, text="লগইন করুন", font=("Kalpurush", 11, "bold"), bg="#0F172A", fg="white", activebackground="#334155", activeforeground="white", bd=0, cursor="hand2", command=self.handle_login)
+        login_btn.pack(fill="x", padx=30, ipady=8)
+
+    def handle_login(self):
+        u_name = self.user_entry.get().strip()
+        p_word = self.pass_entry.get().strip()
+
+        if not u_name or not p_word:
+            messagebox.showerror("ত্রুটি", "দয়া করে ইউজারনেম এবং পাসওয়ার্ড দিন!")
+            return
+
+        self.cursor.execute("SELECT name, teacher_id, designation FROM teachers WHERE (username=? OR teacher_id=?) AND password=?", (u_name, u_name, p_word))
+        res = self.cursor.fetchone()
+
+        if res:
+            self.logged_in_teacher["name"] = res[0]
+            self.logged_in_teacher["id"] = res[1]
+            self.logged_in_teacher["designation"] = res[2]
+            self.logged_in_teacher["username"] = u_name
+            self.create_dashboard()
+        else:
+            if u_name == "admin" and p_word == "1234":
+                self.logged_in_teacher["id"] = "0"
+                self.logged_in_teacher["name"] = "সুনীল কান্তি দে"
+                self.logged_in_teacher["designation"] = "প্রধান শিক্ষক"
+                self.logged_in_teacher["username"] = "admin"
+                self.create_dashboard()
+            else:
+                messagebox.showerror("ব্যর্থ", "ভুল ইউজারনেম বা পাসওয়ার্ড!")
+
+    def create_dashboard(self):
+        self.clear_screen()
+        self.load_teacher_assignments()
+
+        main_frame = tk.Frame(self.root, bg="white", bd=0, highlightbackground="#E2E8F0", highlightthickness=1)
+        main_frame.place(relx=0.5, rely=0.5, anchor="center", width=360, height=660)
+
+        tk.Label(main_frame, text="মার্কস ড্যাশবোর্ড প্যানেল", font=("Kalpurush", 13, "bold"), fg="#1E293B", bg="white").pack(pady=(12, 2))
+        
+        teacher_display_text = f"শিক্ষক: {self.logged_in_teacher['name']}"
+        if self.logged_in_teacher['designation']:
+            teacher_display_text += f" ({self.logged_in_teacher['designation']})"
+        tk.Label(main_frame, text=teacher_display_text, font=("Kalpurush", 8, "bold"), fg="#475569", bg="white").pack(pady=(0, 5))
+        
+        ttk.Separator(main_frame, orient='horizontal').pack(fill='x', padx=15, pady=2)
+
+        # ড্যাশবোর্ডে সংরক্ষিত নম্বর দেখানোর প্রিভিউ ফ্রেম (প্রথমে কন্টেইনার তৈরি করা হলো)
+        preview_label_frame = tk.Frame(main_frame, bg="white")
+        preview_label_frame.pack(fill="x", padx=15, pady=(5, 0))
+        tk.Label(preview_label_frame, text="সংরক্ষিত নম্বরের তালিকা:", font=("Kalpurush", 9, "bold"), fg="#1E293B", bg="white", anchor="w").pack(side="left")
+
+        self.preview_container = tk.Frame(main_frame, bg="#F1F5F9", bd=1, relief="solid")
+        self.preview_container.pack(fill="both", expand=True, padx=15, pady=5)
+
+        # ড্রপডাউন ফ্রেম
+        filter_frame = tk.Frame(main_frame, bg="white")
+        filter_frame.pack(fill="x", padx=15, pady=5, before=preview_label_frame)
+
+        tk.Label(filter_frame, text="পরীক্ষার নাম:", font=("Kalpurush", 8, "bold"), fg="#334155", bg="white", anchor="w").pack(fill="x")
+        self.exam_combo = ttk.Combobox(filter_frame, values=self.exam_list, font=("Kalpurush", 8), state="readonly")
+        self.exam_combo.pack(fill="x", pady=(1, 4))
+        if self.exam_list:
+            self.exam_combo.set(self.exam_list[0])
+        self.exam_combo.bind("<<ComboboxSelected>>", lambda e: self.load_saved_marks_preview())
+
+        tk.Label(filter_frame, text="বরাদ্দকৃত বিষয়:", font=("Kalpurush", 8, "bold"), fg="#334155", bg="white", anchor="w").pack(fill="x")
+        self.subject_combo = ttk.Combobox(filter_frame, values=self.subject_list, font=("Kalpurush", 8), state="readonly")
+        self.subject_combo.pack(fill="x", pady=(1, 4))
+        if self.subject_list:
+            self.subject_combo.set(self.subject_list[0])
+        self.subject_combo.bind("<<ComboboxSelected>>", self.update_sections_for_selected_class)
+
+        tk.Label(filter_frame, text="শাখা (Section):", font=("Kalpurush", 8, "bold"), fg="#334155", bg="white", anchor="w").pack(fill="x")
+        self.section_combo = ttk.Combobox(filter_frame, values=self.section_list, font=("Kalpurush", 8), state="readonly")
+        self.section_combo.pack(fill="x", pady=(1, 4))
+        self.section_combo.bind("<<ComboboxSelected>>", lambda e: self.load_saved_marks_preview())
+
+        # এন্ট্রি প্যানেলে যাওয়ার বাটন এবং সিঙ্ক বাটন
+        btn_box = tk.Frame(main_frame, bg="white")
+        btn_box.pack(fill="x", padx=15, pady=5, before=preview_label_frame)
+
+        proceed_btn = tk.Button(btn_box, text="মার্কস এন্ট্রি করুন", font=("Kalpurush", 9, "bold"), bg="#0F172A", fg="white", activebackground="#334155", activeforeground="white", bd=0, cursor="hand2", command=self.open_student_marks_entry)
+        proceed_btn.pack(side="left", fill="x", expand=True, padx=2, ipady=6)
+
+        sync_cloud_btn = tk.Button(btn_box, text="ফলাফল সেন্ড ☁", font=("Kalpurush", 9, "bold"), bg="#10B981", fg="white", activebackground="#059669", activeforeground="white", bd=0, cursor="hand2", command=self.sync_dashboard_data_to_cloud)
+        sync_cloud_btn.pack(side="right", fill="x", expand=True, padx=2, ipady=6)
+
+        # এখন সেকশন আপডেট ও প্রিভিউ লোড করা নিরাপদ
+        self.update_sections_for_selected_class()
+
+        back_btn = tk.Button(main_frame, text="লগআউট", font=("Kalpurush", 8), bg="#EF4444", fg="white", activebackground="#DC2626", activeforeground="white", bd=0, command=self.create_login_screen)
+        back_btn.pack(fill="x", padx=15, pady=(0, 8), ipady=4)
+
+    def load_saved_marks_preview(self):
+        if not hasattr(self, 'preview_container'):
+            return
+
+        for widget in self.preview_container.winfo_children():
+            widget.destroy()
+
+        selected_exam = self.exam_combo.get()
+        selected_subject = self.subject_combo.get()
+        selected_section = self.section_combo.get()
+
+        target_class = ""
+        try:
+            parts = selected_subject.split("|")
+            if len(parts) >= 2:
+                target_class = parts[0].replace("ক্লাস:", "").strip()
+        except:
+            pass
+
+        # সাবজেক্টের নাম থেকে অতিরিক্ত 'ক্লাস:' বা 'বিষয়:' অংশ পরিষ্কার করে ডাটাবেজের ফরম্যাটের সাথে মেলানো
+        clean_subject = str(selected_subject).strip()
+        if "বিষয়:" in clean_subject:
+            parts = clean_subject.split("বিষয়:")
+            if len(parts) > 1:
+                clean_subject = parts[1].strip()
+        elif "|" in clean_subject:
+            parts = clean_subject.split("|")
+            if len(parts) > 1:
+                clean_subject = parts[-1].replace("বিষয়:", "").replace("বিষয়:", "").strip()
+        
+        clean_subject = clean_subject.replace("ক্লাস:", "").replace("বিষয়:", "").strip()
+
+        # টেবিল হেডার
+        h_frame = tk.Frame(self.preview_container, bg="#334155")
+        h_frame.pack(fill="x")
+        tk.Label(h_frame, text="রোল", font=("Kalpurush", 8, "bold"), fg="white", bg="#334155", width=5).pack(side="left", ipady=3)
+        tk.Label(h_frame, text="শিক্ষার্থীর নাম", font=("Kalpurush", 8, "bold"), fg="white", bg="#334155", width=16, anchor="w").pack(side="left", ipady=3)
+        tk.Label(h_frame, text="প্রাপ্ত নম্বর", font=("Kalpurush", 8, "bold"), fg="white", bg="#334155", width=12, anchor="center").pack(side="right", ipady=3)
+
+        canvas = tk.Canvas(self.preview_container, bg="white", highlightthickness=0)
+        scrollbar = ttk.Scrollbar(self.preview_container, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas, bg="white")
+
+        scrollable_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        canvas_window = canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.bind('<Configure>', lambda event: canvas.itemconfig(canvas_window, width=event.width))
+        canvas.configure(yscrollcommand=scrollbar.set)
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
+        try:
+            self.cursor.execute("SELECT roll, name FROM students WHERE section=? AND class_name=?", (selected_section, target_class))
+            students = self.cursor.fetchall()
+
+            has_data = False
+            for r, n in students:
+                # ক্লিন করা সাবজেক্টের নাম দিয়ে ডাটাবেজ কুয়েরি করা হচ্ছে
+                self.cursor.execute("""
+                    SELECT obtained_marks FROM marks_store 
+                    WHERE roll=? AND exam_type=? AND subject_name=? AND section=? AND class_name=?
+                """, (str(r), selected_exam, clean_subject, selected_section, target_class))
+                res = self.cursor.fetchone()
+                marks_val = res[0] if res and res[0] else "এন্ট্রি হয়নি"
+
+                row_f = tk.Frame(scrollable_frame, bg="white", bd=0, highlightbackground="#E2E8F0", highlightthickness=1)
+                row_f.pack(fill="x", pady=1)
+
+                tk.Label(row_f, text=str(r), font=("Arial", 8), fg="#334155", bg="white", width=5, anchor="center").pack(side="left", ipady=2)
+                tk.Label(row_f, text=str(n), font=("Kalpurush", 8), fg="#1E293B", bg="white", width=16, anchor="w").pack(side="left", ipady=2)
+                tk.Label(row_f, text=str(marks_val), font=("Arial", 8, "bold"), fg="#0F172A" if marks_val != "এন্ট্রি হয়নি" else "#94A3B8", bg="white", width=12, anchor="center").pack(side="right", ipady=2)
+                has_data = True
+
+            if not has_data:
+                tk.Label(scrollable_frame, text="কোনো শিক্ষার্থী পাওয়া যায়নি", font=("Kalpurush", 8), fg="#64748B", bg="white").pack(pady=10)
+        except Exception as e:
+            print(f"Preview load error: {e}")
+
+    def sync_dashboard_data_to_cloud(self):
+        """ড্যাশবোর্ডের 'ফলাফল সেন্ড' বাটনে ক্লিক করলে প্রোগ্রেস বার ও মাল্টি-থ্রেডিংয়ের মাধ্যমে দ্রুত সমস্ত ফলাফল এক ক্লিকে অনলাইন গুগল শিটে পাঠানোর ফাংশন"""
+        try:
+            confirm = messagebox.askyesno("নিশ্চিতকরণ", "আপনি কি এই পরীক্ষার সমস্ত বিষয়ের সমস্ত শিক্ষার্থীর সংরক্ষিত ফলাফল দ্রুত অনলাইন গুগল শিটে পাঠাতে চান?")
+            if not confirm:
+                return
+
+            selected_exam = self.exam_combo.get()
+            if not selected_exam:
+                messagebox.showwarning("সতর্কতা", "অনুগ্রহ করে প্রথমে পরীক্ষার নাম সিলেক্ট করুন!")
+                return
+
+            # নির্দিষ্ট পরীক্ষার সমস্ত সংরক্ষিত মার্কস লোকাল ডাটাবেস থেকে কুয়েরি করা (subject_code সহ)
+            self.cursor.execute("""
+                SELECT m.roll, m.exam_type, m.subject_name, m.subject_code, m.section, m.class_name, m.obtained_marks,
+                       s.name, s.department
+                FROM marks_store m
+                LEFT JOIN students s ON m.roll = s.roll AND m.class_name = s.class_name AND m.section = s.section
+                WHERE m.exam_type=?
+            """, (selected_exam,))
+            
+            all_records = self.cursor.fetchall()
+
+            if not all_records:
+                messagebox.showwarning("সতর্কতা", "শিটে পাঠানোর মতো এই পরীক্ষার কোনো সংরক্ষিত ফলাফল পাওয়া যায়নি!")
+                return
+
+            WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxDwLwPVv6i-6JvSe7ueJEWdKkURm6zg7gQCGuYmxPdaJ6KGHVcbXdRqc4fIXbXhwiZYA/exec"
+            total_records = len(all_records)
+
+            # --- লাইভ প্রোগ্রেস বার উইন্ডো তৈরি করা ---
+            progress_win = tk.Toplevel(self.root)
+            progress_win.title("ফলাফল সিঙ্ক হচ্ছে...")
+            progress_win.geometry("380x150")
+            progress_win.config(bg="white")
+            progress_win.resizable(False, False)
+            progress_win.grab_set() # ফোকাস লক করে রাখা
+
+            # উইন্ডো স্ক্রিনের মাঝখানে পজিশন করা
+            progress_win.update_idletasks()
+            x = (progress_win.winfo_screenwidth() - progress_win.winfo_reqwidth()) / 2
+            y = (progress_win.winfo_screenheight() - progress_win.winfo_reqheight()) / 2
+            progress_win.geometry(f"+{int(x)}+{int(y)}")
+
+            tk.Label(progress_win, text="অনলাইন গুগল শিটে দ্রুত ডেটা পাঠানো হচ্ছে...", font=("Kalpurush", 10, "bold"), bg="white", fg="#1E293B").pack(pady=15)
+            
+            progress_bar = ttk.Progressbar(progress_win, orient="horizontal", length=320, mode="determinate", maximum=total_records)
+            progress_bar.pack(pady=5)
+
+            status_label = tk.Label(progress_win, text=f"০% সম্পন্ন (০ / {total_records})", font=("Kalpurush", 9), bg="white", fg="#64748B")
+            status_label.pack(pady=5)
+
+            success_count = [0] # থ্রেড সেফ কাউন্টার
+
+            def send_single_record(row):
+                roll, exam, subject, sub_code, section, class_name, obtained, name, dept = row
+                
+                written, mcq, prac, total = 0, 0, 0, 0
+                if obtained == "ABSENT":
+                    total = "ABSENT"
+                elif "_" in str(obtained):
+                    parts = str(obtained).split("_")
+                    written = float(parts[0]) if len(parts) > 0 and parts[0] else 0
+                    mcq = float(parts[1]) if len(parts) > 1 and parts[1] else 0
+                    prac = float(parts[2]) if len(parts) > 2 and parts[2] else 0
+                    total = written + mcq + prac
+                else:
+                    try:
+                        total = float(obtained)
+                    except:
+                        total = 0
+
+                payload = {
+                    "id": f"{class_name}_{section}_{roll}_{exam}_{subject}",
+                    "exam_name": exam,
+                    "class_name": class_name,
+                    "section": section,
+                    "department": dept if dept else "",
+                    "subject_name": subject,
+                    "subject_code": sub_code if sub_code else "", # এখানে ডাটাবেজ থেকে আসা কোডটি বসানো হলো
+                    "student_id": "",
+                    "roll": roll,
+                    "name": name if name else "",
+                    "written": written,
+                    "mcq": mcq,
+                    "practical": prac,
+                    "total": total
+                }
+
+                try:
+                    response = requests.post(WEB_APP_URL, json=payload, timeout=15)
+                    if response.status_code == 200:
+                        return True
+                except Exception as net_err:
+                    print(f"Cloud sync error for roll {roll}, subject {subject}: {net_err}")
+                return False
+
+            def background_sync():
+                completed = 0
+                with ThreadPoolExecutor(max_workers=3) as executor:
+                    futures = {executor.submit(send_single_record, row): row for row in all_records}
+                    
+                    for future in as_completed(futures):
+                        res = future.result()
+                        if res:
+                            success_count[0] += 1
+                        completed += 1
+                        
+                        percent = int((completed / total_records) * 100)
+                        progress_win.after(0, lambda c=completed, p=percent: [
+                            progress_bar.config(value=c),
+                            status_label.config(text=f"{p}% সম্পন্ন ({c} / {total_records})")
+                        ])
+
+                progress_win.after(0, lambda: [
+                    progress_win.destroy(),
+                    messagebox.showinfo("সফল", f"মোট {total_records} জনের মধ্যে সফলভাবে {success_count[0]} টি ফলাফল অনলাইন গুগল শিটে জমা হয়েছে!")
+                ])
+
+            threading.Thread(target=background_sync, daemon=True).start()
+
+        except Exception as e:
+            messagebox.showerror("ত্রুটি", f"গুগল শিটে ডেটা পাঠাতে সমস্যা হয়েছে: {e}")
+
+
+    def update_sections_for_selected_class(self, event=None):
+        if not hasattr(self, 'section_combo'):
+            return
+
+        selected_subject = self.subject_combo.get()
+        target_class = ""
+        try:
+            parts = selected_subject.split("|")
+            if len(parts) >= 2:
+                target_class = parts[0].replace("ক্লাস:", "").strip()
+        except:
+            pass
+
+        section_set = []
+        try:
+            if target_class:
+                self.cursor.execute("SELECT DISTINCT section_name FROM class_sections WHERE class_name=?", (target_class,))
+                res = self.cursor.fetchall()
+                for r in res:
+                    if r[0] and r[0] not in section_set:
+                        section_set.append(r[0])
+            
+            if not section_set:
+                self.cursor.execute("SELECT DISTINCT section_name FROM teacher_assignments WHERE class_name=?", (target_class,))
+                res = self.cursor.fetchall()
+                for r in res:
+                    if r[0] and r[0] not in section_set:
+                        section_set.append(r[0])
+        except Exception as e:
+            print(f"Section update error: {e}")
+
+        if not section_set:
+            section_set = ["A"]
+
+        self.section_combo['values'] = section_set
+        self.section_combo.set(section_set[0])
+        self.load_saved_marks_preview()
+
+    def load_teacher_assignments(self):
+        self.exam_list = []
+        self.subject_list = []
+        self.section_list = []
+
+        try:
+            t_id = str(self.logged_in_teacher.get("id", "")).strip()
+            u_name = str(self.logged_in_teacher.get("username", "")).strip()
+            name_val = str(self.logged_in_teacher.get("name", "")).strip()
+
+            if u_name.lower() == "admin" or t_id == "0":
+                self.cursor.execute("SELECT exam_type, class_name, subject_name, subject_code, section_name FROM teacher_assignments")
+            else:
+                self.cursor.execute("""
+                    SELECT exam_type, class_name, subject_name, subject_code, section_name 
+                    FROM teacher_assignments 
+                    WHERE TRIM(teacher_id)=? OR TRIM(teacher_id)=? OR TRIM(teacher_id)=?
+                """, (t_id, u_name, name_val))
+                
+            data = self.cursor.fetchall()
+            
+            if not data and u_name.lower() != "admin":
+                self.cursor.execute("SELECT exam_type, class_name, subject_name, subject_code, section_name FROM teacher_assignments")
+                data = self.cursor.fetchall()
+
+            for row in data:
+                exam, cls, sub, code, sec = row
+                if exam and exam not in self.exam_list:
+                    self.exam_list.append(exam)
+                
+                sub_clean = str(sub).split("—")[0].replace("কোড:", "").strip()
+                code_clean = str(code).strip()
+                
+                sub_str = f"ক্লাস: {cls} | বিষয়: {sub_clean} — কোড: {code_clean}"
+                if sub_str not in self.subject_list:
+                    self.subject_list.append(sub_str)
+                    
+                if sec and sec not in self.section_list:
+                    self.section_list.append(sec)
+        except Exception as e:
+            print(f"Assignment load error: {e}")
+
+        if not self.exam_list:
+            self.exam_list = ["বার্ষিক পরীক্ষা"]
+        if not self.subject_list:
+            self.subject_list = ["বরাদ্দকৃত কোনো বিষয় পাওয়া যায়নি"]
+        if not self.section_list:
+            self.section_list = ["A"]
+
+    def open_student_marks_entry(self):
+        selected_exam = self.exam_combo.get()
+        selected_subject = self.subject_combo.get()
+        selected_section = self.section_combo.get()
+
+        if "পাওয়া যায়নি" in selected_subject:
+            messagebox.showwarning("সতর্কতা", "দয়া করে সঠিক বিষয় নির্বাচন করুন!")
+            return
+
+        # ড্রপডাউন থেকে আসা সাবজেক্টের নাম থেকে অতিরিক্ত 'ক্লাস:' বা 'বিষয়:' অংশ পরিষ্কার করা
+        clean_subject = str(selected_subject).strip()
+        if "বিষয়:" in clean_subject:
+            parts = clean_subject.split("বিষয়:")
+            if len(parts) > 1:
+                clean_subject = parts[1].strip()
+        elif "|" in clean_subject:
+            parts = clean_subject.split("|")
+            if len(parts) > 1:
+                clean_subject = parts[-1].replace("বিষয়:", "").replace("বিষয়:", "").strip()
+        
+        clean_subject = clean_subject.replace("ক্লাস:", "").replace("বিষয়:", "").strip()
+
+        target_class = ""
+        target_subject_name = ""
+        target_code = ""
+        try:
+            parts = selected_subject.split("|")
+            if len(parts) >= 2:
+                target_class = parts[0].replace("ক্লাস:", "").strip()
+                sub_part = parts[1].split("—")[0]
+                target_subject_name = sub_part.replace("বিষয়:", "").strip()
+                if "কোড:" in selected_subject:
+                    target_code = selected_subject.split("কোড:")[1].strip()
+        except:
+            pass
+
+        written_m = 0
+        mcq_m = 0
+        practical_m = 0
+        try:
+            self.cursor.execute("""
+                SELECT written_marks, mcq_marks, practical_marks 
+                FROM subject_marks_config 
+                WHERE class_name=? AND subject_code=?
+            """, (target_class, target_code))
+            cfg = self.cursor.fetchone()
+            if cfg:
+                written_m, mcq_m, practical_m = cfg
+        except Exception as e:
+            print(f"Config fetch error: {e}")
+
+        self.clear_screen()
+
+        top_bar = tk.Frame(self.root, bg="#0F172A", height=50)
+        top_bar.pack(fill="x")
+        
+        back_btn = tk.Button(top_bar, text="‹ ড্যাশবোর্ডে ফিরে যান", font=("Kalpurush", 9, "bold"), bg="#0F172A", fg="white", activebackground="#1E293B", activeforeground="white", bd=0, cursor="hand2", command=self.create_dashboard)
+        back_btn.pack(side="left", padx=10, ipady=6)
+        
+        tk.Label(top_bar, text="মার্কস এন্ট্রি প্যানেল", font=("Kalpurush", 10, "bold"), fg="white", bg="#0F172A").pack(side="right", padx=12)
+
+        tk.Label(self.root, text=f"পরীক্ষা: {selected_exam} | ক্লাস: {target_class} | শাখা: {selected_section}", font=("Kalpurush", 8, "bold"), fg="#475569", bg="#F8FAFC").pack(pady=4)
+
+        # মেইন কন্টেইনার ফ্রেম
+        outer_container = tk.Frame(self.root, bg="white")
+        outer_container.pack(fill="both", expand=True, padx=8, pady=5)
+
+        # ক্যানভাস এবং উভয়মুখী স্ক্রলবার সেটআপ
+        canvas = tk.Canvas(outer_container, bg="white", highlightthickness=0)
+        v_scrollbar = ttk.Scrollbar(outer_container, orient="vertical", command=canvas.yview)
+        h_scrollbar = ttk.Scrollbar(outer_container, orient="horizontal", command=canvas.xview)
+        
+        scrollable_frame = tk.Frame(canvas, bg="white")
+
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+
+        canvas_window = canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        
+        canvas.bind('<Configure>', lambda event: canvas.itemconfig(canvas_window, width=max(event.width, 450)))
+
+        canvas.configure(yscrollcommand=v_scrollbar.set, xscrollcommand=h_scrollbar.set)
+
+        canvas.grid(row=0, column=0, sticky="nsew")
+        v_scrollbar.grid(row=0, column=1, sticky="ns")
+        h_scrollbar.grid(row=1, column=0, sticky="ew")
+
+        outer_container.grid_rowconfigure(0, weight=1)
+        outer_container.grid_columnconfigure(0, weight=1)
+
+        # টেবিল হেডার ফ্রেম
+        header_frame = tk.Frame(scrollable_frame, bg="#334155")
+        header_frame.pack(fill="x", padx=2, pady=2)
+        
+        for c in range(6):
+            header_frame.grid_columnconfigure(c, minsize=55 if c>=2 and c<=4 else (45 if c==0 else (120 if c==1 else 65)), weight=0)
+
+        tk.Label(header_frame, text="রোল", font=("Kalpurush", 8, "bold"), fg="white", bg="#334155", anchor="center").grid(row=0, column=0, ipady=4, sticky="nsew")
+        tk.Label(header_frame, text="শিক্ষার্থীর নাম", font=("Kalpurush", 8, "bold"), fg="white", bg="#334155", anchor="w").grid(row=0, column=1, ipady=4, sticky="nsew", padx=4)
+
+        if written_m > 0:
+            tk.Label(header_frame, text="CQ", font=("Kalpurush", 8, "bold"), fg="white", bg="#334155", anchor="center").grid(row=0, column=2, ipady=4, sticky="nsew")
+        if mcq_m > 0:
+            tk.Label(header_frame, text="MCQ", font=("Kalpurush", 8, "bold"), fg="white", bg="#334155", anchor="center").grid(row=0, column=3, ipady=4, sticky="nsew")
+        if practical_m > 0:
+            tk.Label(header_frame, text="PRAC.", font=("Kalpurush", 8, "bold"), fg="white", bg="#334155", anchor="center").grid(row=0, column=4, ipady=4, sticky="nsew")
+        
+        if written_m == 0 and mcq_m == 0 and practical_m == 0:
+            tk.Label(header_frame, text="প্রাপ্ত নম্বর", font=("Kalpurush", 8, "bold"), fg="white", bg="#334155", anchor="center").grid(row=0, column=2, ipady=4, sticky="nsew")
+
+        tk.Label(header_frame, text="Absent", font=("Kalpurush", 8, "bold"), fg="white", bg="#334155", anchor="center").grid(row=0, column=5, ipady=4, sticky="nsew")
+
+        query = "SELECT roll, name, religion, department FROM students WHERE section=? AND class_name=?"
+        self.cursor.execute(query, (selected_section, target_class))
+        students_raw = self.cursor.fetchall()
+
+        students_data = []
+        for s_roll, s_name, s_rel, s_dept in students_raw:
+            include_student = True
+            if "ইসলাম শিক্ষা" in target_subject_name and s_rel and "ইসলাম" not in s_rel:
+                include_student = False
+            elif "হিন্দুধর্ম শিক্ষা" in target_subject_name and s_rel and "হিন্দু" not in s_rel:
+                include_student = False
+
+            if include_student:
+                students_data.append((s_roll, s_name))
+
+        self.marks_entries = {}
+        has_student = False
+
+        def validate_marks(P, max_limit):
+            if P == "" or P.isdigit():
+                if P == "":
+                    return True
+                if int(P) <= max_limit:
+                    return True
+            return False
+
+        vcmd_written = (self.root.register(lambda P: validate_marks(P, written_m)), '%P') if written_m > 0 else None
+        vcmd_mcq = (self.root.register(lambda P: validate_marks(P, mcq_m)), '%P') if mcq_m > 0 else None
+        vcmd_practical = (self.root.register(lambda P: validate_marks(P, practical_m)), '%P') if practical_m > 0 else None
+
+        for s_roll, s_name in students_data:
+            has_student = True
+            row_frame = tk.Frame(scrollable_frame, bg="white", bd=0, highlightbackground="#F1F5F9", highlightthickness=1)
+            row_frame.pack(fill="x", padx=2, pady=2)
+
+            for c in range(6):
+                row_frame.grid_columnconfigure(c, minsize=55 if c>=2 and c<=4 else (45 if c==0 else (120 if c==1 else 65)), weight=0)
+
+            tk.Label(row_frame, text=str(s_roll), font=("Arial", 8), fg="#334155", bg="white", anchor="center").grid(row=0, column=0, ipady=3, sticky="nsew")
+            tk.Label(row_frame, text=str(s_name), font=("Kalpurush", 8), fg="#1E293B", bg="white", anchor="w").grid(row=0, column=1, ipady=3, sticky="nsew", padx=4)
+            
+            entry_dict = {}
+            absent_var = tk.IntVar(value=0)
+
+            def toggle_absent_state(var=absent_var, edict=entry_dict):
+                is_abs = var.get() == 1
+                state_val = "disabled" if is_abs else "normal"
+                bg_val = "#E2E8F0" if is_abs else "#F8FAFC"
+                
+                for key, widget in edict.items():
+                    if key != "absent":
+                        if isinstance(widget, tk.Entry):
+                            widget.config(state=state_val, bg=bg_val)
+                            if is_abs:
+                                widget.delete(0, tk.END)
+
+            if written_m > 0:
+                w_entry = tk.Entry(row_frame, font=("Arial", 8), width=4, bg="#F8FAFC", bd=0, highlightbackground="#CBD5E1", highlightthickness=1, justify="center", validate="key", validatecommand=vcmd_written)
+                w_entry.grid(row=0, column=2, ipady=2, pady=2)
+                entry_dict["written"] = w_entry
+                
+            if mcq_m > 0:
+                m_entry = tk.Entry(row_frame, font=("Arial", 8), width=4, bg="#F8FAFC", bd=0, highlightbackground="#CBD5E1", highlightthickness=1, justify="center", validate="key", validatecommand=vcmd_mcq)
+                m_entry.grid(row=0, column=3, ipady=2, pady=2)
+                entry_dict["mcq"] = m_entry
+                
+            if practical_m > 0:
+                p_entry = tk.Entry(row_frame, font=("Arial", 8), width=4, bg="#F8FAFC", bd=0, highlightbackground="#CBD5E1", highlightthickness=1, justify="center", validate="key", validatecommand=vcmd_practical)
+                p_entry.grid(row=0, column=4, ipady=2, pady=2)
+                entry_dict["practical"] = p_entry
+            
+            if written_m == 0 and mcq_m == 0 and practical_m == 0:
+                s_entry = tk.Entry(row_frame, font=("Arial", 8), width=6, bg="#F8FAFC", bd=0, highlightbackground="#CBD5E1", highlightthickness=1, justify="center")
+                s_entry.grid(row=0, column=2, ipady=2, pady=2)
+                entry_dict["single"] = s_entry
+
+            absent_chk = tk.Checkbutton(row_frame, text="Abs", variable=absent_var, font=("Arial", 7), bg="white", fg="#EF4444", selectcolor="white", command=toggle_absent_state)
+            absent_chk.grid(row=0, column=5, sticky="nsew", padx=2, pady=2)
+            entry_dict["absent"] = absent_var
+
+            # এখানে ক্লিন করা সাবজেক্টের নাম দিয়ে ডাটাবেজ থেকে সেভ করা নম্বর কুয়েরি করা হচ্ছে
+            self.cursor.execute("""
+                SELECT obtained_marks FROM marks_store 
+                WHERE roll=? AND exam_type=? AND subject_name=? AND section=? AND class_name=?
+            """, (str(s_roll), selected_exam, clean_subject, selected_section, target_class))
+            saved_mark = self.cursor.fetchone()
+            
+            if saved_mark and saved_mark[0] is not None:
+                val_str = str(saved_mark[0]).strip()
+                if val_str == "ABSENT":
+                    absent_var.set(1)
+                    toggle_absent_state()
+                else:
+                    # যদি ডেটায় আন্ডারস্কোর থাকে (যেমন: 80_0_0)
+                    if "_" in val_str:
+                        parts_val = val_str.split("_")
+                        # যদি প্যানেলে মাল্টিপল ঘর (written, mcq, practical) থাকে
+                        if len(entry_dict) > 2:
+                            if "written" in entry_dict and len(parts_val) > 0:
+                                entry_dict["written"].insert(0, parts_val[0])
+                            if "mcq" in entry_dict and len(parts_val) > 1:
+                                entry_dict["mcq"].insert(0, parts_val[1])
+                            if "practical" in entry_dict and len(parts_val) > 2:
+                                entry_dict["practical"].insert(0, parts_val[2])
+                        else:
+                            # যদি প্যানেলে শুধু একটি মাত্র বক্স (single) থাকে, তবে আন্ডারস্কোরের আগের মূল নম্বরটি (যেমন: 80) বসিয়ে দিবে
+                            if "single" in entry_dict:
+                                entry_dict["single"].insert(0, parts_val[0])
+                            elif "written" in entry_dict:
+                                entry_dict["written"].insert(0, parts_val[0])
+                    else:
+                        # যদি সাধারণ একক সংখ্যা থাকে
+                        if "single" in entry_dict:
+                            entry_dict["single"].insert(0, val_str)
+                        elif "written" in entry_dict:
+                            entry_dict["written"].insert(0, val_str)
+
+            self.marks_entries[s_roll] = entry_dict
+
+        if not has_student:
+            tk.Label(scrollable_frame, text="এই ক্লাস ও শাখায় কোনো শিক্ষার্থী পাওয়া যায়নি।", font=("Kalpurush", 8, "italic"), fg="#64748B", bg="white").pack(pady=20)
+
+        btn_frame = tk.Frame(self.root, bg="#F8FAFC")
+        btn_frame.pack(fill="x", padx=10, pady=8)
+
+        save_btn = tk.Button(btn_frame, text="নম্বর সংরক্ষণ করুন", font=("Kalpurush", 8, "bold"), bg="#10B981", fg="white", activebackground="#059669", activeforeground="white", bd=0, command=lambda: self.save_marks_action(selected_exam, selected_subject, selected_section, target_class))
+        save_btn.pack(side="left", fill="x", expand=True, padx=2, ipady=5)
+
+        delete_btn = tk.Button(btn_frame, text="নম্বর মুছুন", font=("Kalpurush", 8, "bold"), bg="#EF4444", fg="white", activebackground="#DC2626", activeforeground="white", bd=0, command=lambda: self.delete_marks_action(selected_exam, selected_subject, selected_section, target_class))
+        delete_btn.pack(side="right", fill="x", expand=True, padx=2, ipady=5)
+
+
+    def save_marks_action(self, exam, subject, section, class_name):
+        try:
+            # শুধু subject_code কলামটি না থাকলে তা টেবিলে যুক্ত করার নিরাপদ ব্যবস্থা
+            try:
+                self.cursor.execute("ALTER TABLE marks_store ADD COLUMN subject_code TEXT")
+                self.conn.commit()
+            except Exception:
+                pass # কলামটি আগে থেকেই বিদ্যমান থাকলে এটি কোনো সমস্যা করবে না
+
+            # ১. সাবজেক্টের নাম ও কোড প্রসেসিং
+            raw_subject = str(subject).strip()
+            clean_subject = raw_subject
+            sub_code = ""
+
+            # যদি সাবজেক্টের স্ট্রিং-এ পাইপ বা ক্লাস নির্দেশক থাকে (যেমন: "6 | বাংলা...") তবে সেটি বাদ দেওয়া
+            if "|" in clean_subject:
+                parts = clean_subject.split("|")
+                if len(parts) > 1:
+                    clean_subject = parts[-1].strip()
+
+            # সাবজেক্টের নাম বা স্ট্রিং থেকে কোড আলাদা করার অংশ
+            if "কোড:" in clean_subject:
+                parts = clean_subject.split("কোড:")
+                # clean_subject-এ শুধু মূল নাম ও কোড অংশ থাকবে (যেমন: বাংলা ১ম পত্র — কোড: 101)
+                sub_code = "".join(filter(str.isalnum, parts[1]))
+            
+            if "বিষয়:" in clean_subject:
+                parts = clean_subject.split("বিষয়:")
+                if len(parts) > 1:
+                    clean_subject = parts[1].strip()
+
+            clean_subject = clean_subject.replace("ক্লাস:", "").strip()
+
+            # ২. প্রতিটি শিক্ষার্থীর নম্বর লুপ চালিয়ে সেভ বা আপডেট করা
+            for roll, widgets in self.marks_entries.items():
+                is_absent = widgets["absent"].get() == 1
+                
+                if is_absent:
+                    m_val = "ABSENT"
+                else:
+                    # যদি একক ঘর (single) থাকে
+                    if "single" in widgets:
+                        m_val = widgets["single"].get().strip()
+                        if not m_val:
+                            continue
+                    else:
+                        # যদি মাল্টিপল ঘর (written, mcq, practical) থাকে
+                        w_val = widgets.get("written", tk.Entry()).get().strip() if "written" in widgets else ""
+                        m_val_box = widgets.get("mcq", tk.Entry()).get().strip() if "mcq" in widgets else ""
+                        p_val = widgets.get("practical", tk.Entry()).get().strip() if "practical" in widgets else ""
+                        
+                        if not w_val and not m_val_box and not p_val:
+                            continue
+                        
+                        # মানগুলো আন্ডারস্কোর দিয়ে ফরম্যাট করা
+                        w = w_val if w_val else "0"
+                        m = m_val_box if m_val_box else "0"
+                        p = p_val if p_val else "0"
+                        m_val = f"{w}_{m}_{p}"
+
+                # ৩. ডাটাবেজে subject_code কলাম সহ ইনসার্ট বা আপডেট কুয়েরি (ON CONFLICT ব্যবহার করে)
+                if m_val:
+                    self.cursor.execute("""
+                        INSERT INTO marks_store (roll, exam_type, subject_name, subject_code, section, class_name, obtained_marks)
+                        VALUES (?, ?, ?, ?, ?, ?, ?)
+                        ON CONFLICT(roll, exam_type, subject_name, section, class_name) 
+                        DO UPDATE SET obtained_marks=excluded.obtained_marks, subject_code=excluded.subject_code
+                    """, (str(roll), exam, clean_subject, sub_code, section, class_name, m_val))
+            
+            self.conn.commit()
+            messagebox.showinfo("সফল", "নম্বর সফলভাবে সংরক্ষিত ও আপডেট করা হয়েছে!")
+            self.create_dashboard()
+        except Exception as e:
+            messagebox.showerror("ত্রুটি", f"সংরক্ষণে সমস্যা হয়েছে: {e}")
+
+    def delete_marks_action(self, exam, subject, section, class_name):
+        if messagebox.askyesno("নিশ্চিতকরণ", "আপনি কি এই বিষয়ের সমস্ত নম্বর মুছে ফেলতে চান?"):
+            try:
+                self.cursor.execute("""
+                    DELETE FROM marks_store 
+                    WHERE exam_type=? AND subject_name=? AND section=? AND class_name=?
+                """, (exam, subject, section, class_name))
+                self.conn.commit()
+
+                for entry_dict in self.marks_entries.values():
+                    for widget in entry_dict.values():
+                        if isinstance(widget, tk.Entry):
+                            widget.delete(0, tk.END)
+
+                messagebox.showinfo("সফল", "নম্বরগুলো সফলভাবে মুছে ফেলা হয়েছে!")
+                self.create_dashboard()
+            except Exception as e:
+                messagebox.showerror("ত্রুটি", f"মুছে ফেলতে সমস্যা হয়েছে: {e}")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = SchoolMobileApp(root)
+    root.mainloop()
