@@ -97,8 +97,8 @@
                 <div class="flex items-center gap-3">
                     <div class="relative group">
                         <div id="shopLogoContainer" class="w-12 h-12 rounded-xl bg-gradient-to-tr from-red-600 to-indigo-900 flex items-center justify-center text-white text-2xl font-black shadow-md border-2 border-white overflow-hidden">
-                            <span id="logoText">PP</span>
-                            <img id="customLogoImg" src="" alt="PP Hub Logo" class="hidden w-full h-full object-cover">
+                            <span id="logoText" class="hidden">PP</span>
+                            <img id="customLogoImg" src="logo.png" alt="PP Hub Logo" class="w-full h-full object-cover">
                         </div>
                     </div>
                     <div>
@@ -621,8 +621,8 @@
                                 <div>
                                     <div class="flex items-center gap-2 mb-1">
                                         <div id="invPreviewLogoContainer" class="w-10 h-10 rounded-lg bg-red-600 text-white font-black flex items-center justify-center text-lg overflow-hidden">
-                                            <span id="invLogoText">PP</span>
-                                            <img id="invCustomLogoImg" src="" class="hidden w-full h-full object-cover">
+                                            <span id="invLogoText" class="hidden">PP</span>
+                                            <img id="invCustomLogoImg" src="logo.png" alt="PP Hub Logo" class="w-full h-full object-cover">
                                         </div>
                                         <h2 class="text-xl font-black text-slate-900">PP COMPOSE & PRINTING HUB</h2>
                                     </div>
@@ -724,8 +724,8 @@
                     <!-- SHOP INFO -->
                     <div class="space-y-4">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-red-600 text-white font-black flex items-center justify-center text-xl">
-                                PP
+                            <div class="w-10 h-10 rounded-xl bg-red-600 text-white font-black flex items-center justify-center text-xl overflow-hidden">
+                                <img src="logo.png" alt="PP Hub Logo" class="w-full h-full object-cover">
                             </div>
                             <h3 class="text-xl font-black text-white">PP COMPOSE & PRINTING HUB</h3>
                         </div>
@@ -841,7 +841,7 @@
             // Populate Subject Dropdown
             populateSubjectDropdown();
 
-            // Load stored logo if exists
+            // Load stored logo if exists, else load default logo.png
             loadStoredLogo();
 
             // Check existing login session
@@ -967,6 +967,8 @@
             const storedLogo = localStorage.getItem('pp_shop_logo');
             if (storedLogo) {
                 applyLogoToUI(storedLogo);
+            } else {
+                applyLogoToUI('logo.png');
             }
         }
 
@@ -1138,7 +1140,7 @@
             })
             .catch(err => {
                 console.error(err);
-                showToast('ডেটা পাঠাতে সমস্যা হয়েছে। পুনরায় চেষ্টা করুন।', 'danger');
+                showToast('ডেটা পাঠাইতে সমস্যা হয়েছে। পুনরায় চেষ্টা করুন।', 'danger');
             });
         }
 
