@@ -78,7 +78,7 @@
             <div class="flex items-center gap-4">
                 <a href="tel:01779987327" class="flex items-center gap-1.5 font-bold text-white bg-red-600 hover:bg-red-700 px-3 py-0.5 rounded-full text-xs transition-all shadow-sm">
                     <i class="fa-solid fa-phone"></i>
-                    ০১৭৭৯-৯OD৩27
+                    ০১৭৭৯-৯৮৭৩২৭
                 </a>
                 <a href="https://wa.me/8801779987327" target="_blank" class="flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
                     <i class="fa-brands fa-whatsapp text-sm"></i>
@@ -125,14 +125,12 @@
 
                 <!-- LOGO UPLOAD & MOBILE TOGGLE -->
                 <div class="flex items-center gap-2">
-                    <!-- Custom Logo Upload Button -->
                     <label class="cursor-pointer bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors border border-slate-200">
                         <i class="fa-solid fa-image text-red-600"></i>
                         <span class="hidden sm:inline">লোগো পরিবর্তন</span>
                         <input type="file" id="logoUploadInput" accept="image/*" class="hidden" onchange="handleLogoUpload(event)">
                     </label>
 
-                    <!-- Mobile Menu Button -->
                     <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-lg text-slate-700 hover:bg-slate-100 focus:outline-none">
                         <i class="fa-solid fa-bars text-xl"></i>
                     </button>
@@ -146,7 +144,7 @@
             <a href="#home" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-semibold text-red-600 bg-red-50">হোম</a>
             <a href="#services" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-semibold text-slate-700 hover:bg-slate-50">আমাদের সেবাসমূহ</a>
             <a href="#exam-papers" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-semibold text-slate-700 hover:bg-slate-50">প্রশ্নপত্র প্যাকেজ</a>
-            <a href="#invoice-section" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-semibold text-amber-700 bg-amber-50">ইনভয়েস মেকার (মালিক লগইন)</a>
+            <a href="#invoice-section" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-semibold text-amber-700 bg-amber-50">ইনভয়েস মেকার (মালিক)</a>
             <a href="#contact" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-semibold text-slate-700 hover:bg-slate-50">যোগাযোগ</a>
         </div>
     </nav>
@@ -248,7 +246,7 @@
             </div>
         </section>
 
-        <!-- SERVICES SHOWCASE SECTION (PURE INFORMATIONAL - NO INVOICE ADD BUTTONS) -->
+        <!-- SERVICES SHOWCASE SECTION -->
         <section id="services" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 no-print">
             <div class="text-center max-w-2xl mx-auto mb-12">
                 <span class="text-red-600 font-extrabold text-sm uppercase tracking-widest bg-red-50 px-3 py-1 rounded-full border border-red-100">আমাদের সেবাসমূহ</span>
@@ -417,7 +415,7 @@
                 <p class="text-slate-600 text-sm mt-1">দোকানের ওনার সরাসরি গ্রাহকের বিল তৈরি, প্রসেস এবং প্রিন্ট করবেন</p>
             </div>
 
-            <!-- LOCKED OVERLAY CARD (VISIBLE WHEN NOT LOGGED IN) -->
+            <!-- LOCKED OVERLAY CARD -->
             <div id="invoiceLockOverlay" class="max-w-xl mx-auto bg-white rounded-3xl p-8 sm:p-10 shadow-2xl border border-slate-200 text-center relative overflow-hidden no-print">
                 <div class="w-20 h-20 bg-amber-100 text-amber-600 rounded-3xl flex items-center justify-center text-3xl mx-auto mb-5 shadow-inner border border-amber-200 animate-pulse">
                     <i class="fa-solid fa-lock"></i>
@@ -435,7 +433,7 @@
                             <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
                                 <i class="fa-solid fa-user"></i>
                             </span>
-                            <input type="text" id="loginUserId" required placeholder="উদাহরণ: admin" class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all font-semibold">
+                            <input type="text" id="loginUserId" required placeholder="ইউজার আইডি লিখুন" class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all font-semibold">
                         </div>
                     </div>
 
@@ -463,11 +461,6 @@
                         লগইন করুন
                     </button>
                 </form>
-
-                <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-center gap-2 text-xs text-amber-700 font-medium bg-amber-50 py-2 rounded-xl border border-amber-200/60">
-                    <i class="fa-solid fa-lightbulb text-amber-500"></i>
-                    <span>টেস্টিং ক্রেডেনশিয়াল: ID: <strong class="underline">admin</strong> | Pass: <strong class="underline">pphub123</strong></span>
-                </div>
             </div>
 
             <!-- UNLOCKED INVOICE CONTAINER (VISIBLE AFTER LOGIN) -->
@@ -535,34 +528,45 @@
                         <div class="space-y-4 bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
                             <h5 class="text-sm font-bold text-slate-800 flex items-center justify-between">
                                 <span>আইটেম যোগ করুন</span>
-                                <span class="text-xs text-red-600 font-semibold">১-১২ শ্রেণি বা কাস্টম সার্ভিস</span>
+                                <span class="text-xs text-red-600 font-semibold">শ্রেণি ও বিষয় নির্বাচন</span>
                             </h5>
 
-                            <!-- Service Type Preset Selector -->
+                            <!-- Service Type / Class Selector -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1">সেবার ধরণ নির্বাচন করুন</label>
-                                <select id="itemCategorySelect" onchange="handleCategoryChange()" class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-sm font-medium focus:ring-2 focus:ring-red-500 outline-none">
-                                    <optgroup label="পরীক্ষার প্রশ্নপত্র (শ্রেণি ১ - ১২)">
-                                        <option value="exam_1_5">শ্রেণি ১ - ৫ (প্রাথমিক প্রশ্নপত্র)</option>
-                                        <option value="exam_6_8">শ্রেণি ৬ - ৮ (জুনিয়র প্রশ্নপত্র)</option>
-                                        <option value="exam_9_10">শ্রেণি ৯ - ১০ (মাধ্যমিক প্রশ্নপত্র)</option>
-                                        <option value="exam_11_12">শ্রেণি ১১ - ১২ (উচ্চ মাধ্যমিক)</option>
-                                        <option value="exam_madrasa">মাদ্রাসা শিক্ষা (দাকিল/ইবতেদায়ী)</option>
-                                    </optgroup>
-                                    <optgroup label="অন্যান্য কম্পোজ ও প্রিন্টিং">
-                                        <option value="certificate">সার্টিফিকেট ও প্রশংসাপত্র</option>
-                                        <option value="idcard">স্টুডেন্ট আইডি কার্ড</option>
-                                        <option value="binding">স্পাইরাল / হার্ড বাইন্ডিং</option>
-                                        <option value="photocopy">ফটোকপি (কালার/বিঅ্যান্ডডব্লিউ)</option>
-                                        <option value="lamination">ল্যামিনেশন</option>
-                                        <option value="custom">অন্যান্য টাইপিং/কাস্টম সার্ভিস</option>
-                                    </optgroup>
+                                <label class="block text-xs font-bold text-slate-600 mb-1">সেবার ধরন (শ্রেণি নির্বাচন করুন)</label>
+                                <select id="itemCategorySelect" onchange="handleClassSubjectChange()" class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-sm font-medium focus:ring-2 focus:ring-red-500 outline-none">
+                                    <option value="প্রথম শ্রেণি">প্রথম শ্রেণি</option>
+                                    <option value="দ্বিতীয় শ্রেণি">দ্বিতীয় শ্রেণি</option>
+                                    <option value="তৃতীয় শ্রেণি">তৃতীয় শ্রেণি</option>
+                                    <option value="চতুর্থ শ্রেণি">চতুর্থ শ্রেণি</option>
+                                    <option value="পঞ্চম শ্রেণি">পঞ্চম শ্রেণি</option>
+                                    <option value="ষষ্ঠ শ্রেণি">ষষ্ঠ শ্রেণি</option>
+                                    <option value="সপ্তম শ্রেণি">সপ্তম শ্রেণি</option>
+                                    <option value="অষ্টম শ্রেণি">অষ্টম শ্রেণি</option>
+                                    <option value="নবম-দশম শ্রেণি">নবম-দশম শ্রেণি</option>
+                                    <option value="একাদশ-দ্বাদশ শ্রেণি">একাদশ-দ্বাদশ শ্রেণি</option>
+                                    <option value="মাদ্রাসা/অন্যান্য">মাদ্রাসা/অন্যান্য</option>
                                 </select>
                             </div>
 
+                            <!-- Subject Name Selector -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1">আইটেম/বিষয়ের বিবরণ</label>
-                                <input type="text" id="itemDescription" placeholder="যেমন: গণিত প্রশ্নপত্র কাস্টমটাইপ" class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-sm font-medium focus:ring-2 focus:ring-red-500 outline-none">
+                                <label class="block text-xs font-bold text-slate-600 mb-1">বিষয়ের নাম নির্বাচন করুন</label>
+                                <select id="itemSubjectSelect" onchange="handleClassSubjectChange()" class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-sm font-medium focus:ring-2 focus:ring-red-500 outline-none">
+                                    <!-- Options populated dynamically in JavaScript -->
+                                </select>
+                            </div>
+
+                            <!-- Custom Subject Input Field -->
+                            <div id="customSubjectInputWrapper" class="hidden">
+                                <label class="block text-xs font-bold text-amber-700 mb-1">কাস্টম বিষয়ের নাম লিখুন</label>
+                                <input type="text" id="customSubjectInput" oninput="handleClassSubjectChange()" placeholder="যেমন: সাধারণ জ্ঞান / তথ্যপ্রযুক্তি" class="w-full p-2.5 bg-amber-50 border border-amber-300 rounded-xl text-sm font-medium focus:ring-2 focus:ring-amber-500 outline-none">
+                            </div>
+
+                            <!-- Final Generated Item Description -->
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 mb-1">আইটেম/বিষয়ের বিবরণ (সম্পাদনাযোগ্য)</label>
+                                <input type="text" id="itemDescription" placeholder="উদাহরণ: প্রথম শ্রেণি - বাংলা" class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-sm font-medium focus:ring-2 focus:ring-red-500 outline-none">
                             </div>
 
                             <div class="grid grid-cols-2 gap-3">
@@ -772,21 +776,55 @@
     <script>
         /* ==========================================================================
            1. GOOGLE APPS SCRIPT URL CONFIGURATION
-           দোকানের মালিক এখানে নিজের গুগল অ্যাপস স্ক্রিপ্ট (Google Apps Script) URL পেস্ট করবেন।
            ========================================================================== */
-        const GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzGEUQB5YBR3Df_l65P-lbbQDjlRhnDc74J0r5Kt2bVkk7NOiRDW3mXTUB3ODB_aWyr9A/exec";
 
         /* ==========================================================================
            2. OWNER AUTHENTICATION SETTINGS
-           ডিফল্ট ক্রেডেনশিয়াল: User ID = admin , Password = pphub123
-           মালিক চাইলে নিচের ভ্যারিয়েবল দুটি পরিবর্তন করে নিজের আইডি/পাসওয়ার্ড সেট করতে পারবেন।
            ========================================================================== */
         const OWNER_USER_ID = "admin";
-        const OWNER_PASSWORD = "pphub123";
+        const ALLOWED_PASSWORDS = ["admin", "123456", "pphub123"];
+
+        /* ==========================================================================
+           3. SUBJECTS ARRAY CONFIGURATION
+           ========================================================================== */
+        const SUBJECTS_LIST = [
+            "বাংলা",
+            "ইংরেজি",
+            "গণিত",
+            "পরিবেশ পরিচিতি",
+            "অঙ্কন / শিল্পকলা",
+            "বাংলাদেশ ও বিশ্বপরিচয়",
+            "প্রাথমিক বিজ্ঞান",
+            "ইসলাম ও নৈতিক শিক্ষা",
+            "হিন্দুধর্ম ও নৈতিক শিক্ষা",
+            "বৌদ্ধধর্ম ও নৈতিক শিক্ষা",
+            "খ্রিস্টধর্ম ও নৈতিক শিক্ষা",
+            "বাংলা ১ম পত্র",
+            "বাংলা ২য় পত্র",
+            "ইংরেজি ১ম পত্র",
+            "ইংরেজি ২য় পত্র",
+            "বিজ্ঞান",
+            "তথ্য ও যোগাযোগ প্রযুক্তি (আইসিটি)",
+            "কৃষি শিক্ষা",
+            "গার্হস্থ্য বিজ্ঞান",
+            "পদার্থবিজ্ঞান",
+            "রসায়ন",
+            "জীববিজ্ঞান",
+            "উচ্চতর গণিত",
+            "ইতিহাস ও বিশ্বসভ্যতা",
+            "ভূগোল ও পরিবেশ",
+            "অর্থনীতি",
+            "পৌরনীতি ও নাগরিকতা",
+            "হিসাববিজ্ঞান",
+            "ব্যবসায় উদ্যোগ",
+            "ফিন্যান্স ও ব্যাংকিং",
+            "অন্যান্য (কাস্টম বিষয়)"
+        ];
 
         // Global State Array for Invoice Items
         let invoiceItems = [
-            { id: 1, desc: 'শ্রেণি ৬ - ১০ প্রশ্নপত্র টাইপিং (গণিত/ইংরেজি)', qty: 4, price: 60 }
+            { id: 1, serviceType: 'ষষ্ঠ শ্রেণি', desc: 'ষষ্ঠ শ্রেণি - গণিত', qty: 1, price: 60 }
         ];
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -800,15 +838,54 @@
             // Generate random invoice ID
             document.getElementById('invNumber').value = 'INV-' + Math.floor(100000 + Math.random() * 900000);
 
+            // Populate Subject Dropdown
+            populateSubjectDropdown();
+
             // Load stored logo if exists
             loadStoredLogo();
 
             // Check existing login session
             checkSessionLogin();
 
+            // Handle initial Class & Subject selection
+            handleClassSubjectChange();
+
             // Render default invoice items
             renderInvoice();
         });
+
+        // POPULATE SUBJECT DROPDOWN OPTIONS
+        function populateSubjectDropdown() {
+            const subjectSelect = document.getElementById('itemSubjectSelect');
+            subjectSelect.innerHTML = '';
+            
+            SUBJECTS_LIST.forEach(subj => {
+                const opt = document.createElement('option');
+                opt.value = subj;
+                opt.textContent = subj;
+                subjectSelect.appendChild(opt);
+            });
+        }
+
+        // HANDLE CLASS AND SUBJECT SELECTION CHANGE
+        function handleClassSubjectChange() {
+            const selectedClass = document.getElementById('itemCategorySelect').value;
+            const selectedSubject = document.getElementById('itemSubjectSelect').value;
+            const customWrapper = document.getElementById('customSubjectInputWrapper');
+            const descInput = document.getElementById('itemDescription');
+            
+            let finalSubject = selectedSubject;
+
+            if (selectedSubject === "অন্যান্য (কাস্টম বিষয়)") {
+                customWrapper.classList.remove('hidden');
+                const customText = document.getElementById('customSubjectInput').value.trim();
+                finalSubject = customText ? customText : "কাস্টম বিষয়";
+            } else {
+                customWrapper.classList.add('hidden');
+            }
+
+            descInput.value = `${selectedClass} - ${finalSubject}`;
+        }
 
         // OWNER LOGIN HANDLER
         function handleOwnerLogin(e) {
@@ -817,7 +894,7 @@
             const passInput = document.getElementById('loginPassword').value.trim();
             const errorMsg = document.getElementById('loginErrorMsg');
 
-            if (idInput === OWNER_USER_ID && passInput === OWNER_PASSWORD) {
+            if (idInput === OWNER_USER_ID && ALLOWED_PASSWORDS.includes(passInput)) {
                 // Login Success
                 sessionStorage.setItem('pp_owner_logged_in', 'true');
                 errorMsg.classList.add('hidden');
@@ -907,34 +984,9 @@
             invImgEl.classList.remove('hidden');
         }
 
-        // CATEGORY CHANGE HANDLER
-        function handleCategoryChange() {
-            const cat = document.getElementById('itemCategorySelect').value;
-            const descInput = document.getElementById('itemDescription');
-            const priceInput = document.getElementById('itemPrice');
-
-            const presets = {
-                'exam_1_5': { desc: 'শ্রেণি ১-৫ প্রশ্নপত্র টাইপিং ও ফরমেটিং', price: 40 },
-                'exam_6_8': { desc: 'শ্রেণি ৬-৮ প্রশ্নপত্র টাইপিং ও ফরমেটিং', price: 50 },
-                'exam_9_10': { desc: 'শ্রেণি ৯-১০ সাইন্স/গণিত প্রশ্নপত্র কম্পোজ', price: 60 },
-                'exam_11_12': { desc: 'শ্রেণি ১১-১২ কাস্টম প্রশ্নপত্র টাইপিং', price: 80 },
-                'exam_madrasa': { desc: 'মাদ্রাসা আরবি ও সাধারণ প্রশ্নপত্র টাইপিং', price: 60 },
-                'certificate': { desc: 'সার্টিফিকেট ও প্রশংসাপত্র ডিজাইন ও প্রিন্ট', price: 100 },
-                'idcard': { desc: 'পিভিসি প্লাস্টিক আইডি কার্ড ও হোল্ডার ফিতা', price: 120 },
-                'binding': { desc: 'স্পাইরাল বাইন্ডিং উইথ প্লাস্টিক কভার', price: 30 },
-                'photocopy': { desc: 'এ৪ ফটোকপি ও লিগ্যাল কালার প্রিন্ট', price: 10 },
-                'lamination': { desc: '১০০ মি পৌচেস থিক ল্যামিনেশন', price: 20 },
-                'custom': { desc: 'অফিশিয়াল টাইপিং ও কম্পোজ সার্ভিস', price: 50 }
-            };
-
-            if (presets[cat]) {
-                descInput.value = presets[cat].desc;
-                priceInput.value = presets[cat].price;
-            }
-        }
-
         // ADD ITEM TO INVOICE
         function addItemToInvoice() {
+            const selectedClass = document.getElementById('itemCategorySelect').value;
             const desc = document.getElementById('itemDescription').value.trim();
             const qty = parseFloat(document.getElementById('itemQty').value) || 1;
             const price = parseFloat(document.getElementById('itemPrice').value) || 0;
@@ -946,6 +998,7 @@
 
             const newItem = {
                 id: Date.now(),
+                serviceType: selectedClass,
                 desc: desc,
                 qty: qty,
                 price: price
@@ -954,8 +1007,6 @@
             invoiceItems.push(newItem);
             renderInvoice();
             
-            // Reset input desc
-            document.getElementById('itemDescription').value = '';
             showToast('আইটেম যোগ করা হয়েছে', 'info');
         }
 
@@ -968,6 +1019,7 @@
 
         // BENGALI NUMBER CONVERTER HELPER
         function toBengaliNumber(num) {
+            if (num === null || num === undefined) return '০';
             const bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
             return num.toString().replace(/\d/g, digit => bnDigits[digit]);
         }
@@ -1037,7 +1089,7 @@
             showToast('ইনভয়েস তথ্য রিসেট করা হয়েছে', 'info');
         }
 
-        // SAVE INVOICE TO GOOGLE SHEET
+        // SAVE INVOICE TO GOOGLE SHEET WITH MANDATORY EXACT KEYS
         function saveToGoogleSheet() {
             if (GOOGLE_SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE" || !GOOGLE_SCRIPT_URL) {
                 showToast('গুগল শিট URL সেট করা নেই! কোডের GOOGLE_SCRIPT_URL এ লিঙ্ক যোগ করুন।', 'warning');
@@ -1057,16 +1109,20 @@
             const due = Math.max(0, totalBill - paid);
             const status = due <= 0 ? 'পরিশোধিত' : 'বাকি';
 
+            // Collect unique Service Types / Classes selected in items
+            const uniqueTypes = [...new Set(invoiceItems.map(i => i.serviceType || i.desc))].join(', ') || 'অন্যান্য';
+
+            // STRICT REQUIRED PAYLOAD FORMAT
             const payload = {
-                id: Date.now(),
-                invoiceNo: invNo,
-                date: date,
-                customer: custName,
-                serviceType: invoiceItems.map(i => i.desc).join(', ') || 'কম্পোজ সার্ভিস',
-                totalBill: totalBill,
-                paid: paid,
-                due: due,
-                status: status
+                "ID": Date.now(),
+                "ইনভয়েস নং": invNo,
+                "তারিখ": date,
+                "কাস্টমার": custName,
+                "সেবার ধরন": uniqueTypes,
+                "মোট বিল": totalBill,
+                "জমা": paid,
+                "বাকি": due,
+                "স্ট্যাটাস": status
             };
 
             showToast('গুগল শিটে ডেটা সেভ হচ্ছে...', 'info');
@@ -1092,7 +1148,7 @@
             menu.classList.toggle('hidden');
         }
 
-        // TOAST NOTIFICATION SYSTEM (Replaces alert())
+        // TOAST NOTIFICATION SYSTEM
         function showToast(message, type = 'info') {
             const colors = {
                 success: 'bg-emerald-600 text-white',
